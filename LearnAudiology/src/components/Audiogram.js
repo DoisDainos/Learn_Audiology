@@ -2,7 +2,7 @@ import React from 'react';
 import { View, ScrollView, Text, TouchableHighlight } from 'react-native';
 import  { XAxis, YAxis } from 'react-native-svg-charts';
 import { Svg } from 'react-native-svg';
-import { Button, Icon } from 'react-native-elements';
+import { Button, Icon, Badge } from 'react-native-elements';
 import Grid from './audiogram_parts/Grid';
 import Points from './audiogram_parts/Points';
 import Symbols from './audiogram_parts/Symbols';
@@ -17,6 +17,8 @@ import Symbols from './audiogram_parts/Symbols';
  * - TODO pointsACLeftMask [icon: 'https://i.imgur.com/6KrOAuH.png']
  * - TODO pointsBCRightMask [icon: 'https://i.imgur.com/u4Zfi3I.png?1']
  * - TODO pointsBCLeftMask [icon: 'https://i.imgur.com/PO8NtHf.png?1']
+ * - TODO pointsNRRight [icon: 'https://i.imgur.com/Wmg6zem.png']
+ * - TODO pointsNRLeft [icon: 'https://i.imgur.com/N4NDGBm.png']
  */
 class Audiogram extends React.Component {
   state = {
@@ -173,25 +175,26 @@ class Audiogram extends React.Component {
       <View>
         <View style={{
           flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'center',
-          height: 50
+          alignItems: 'flex-end',
+          justifyContent: 'flex-end',
+          height: 50,
+          marginRight: 20
         }}>
-          <Icon
-            size={ 20 }
-            name="save"
-            raised
-            reverse
-            color='rgb(94, 188, 241)'
-            reverseColor="#fff"
-          />
-          <Button
-            raised
-            icon={{name: 'adjust'}}
-            title="SYMBOLS"
-            backgroundColor="rgb(94, 188, 241)"
+          <Badge
+            containerStyle={{
+              borderColor: 'rgb(94, 188, 241)',
+              borderWidth: 2,
+              backgroundColor: '#fff',
+              flexDirection: 'row'
+            }}
             onPress={() => this.setSymbolsVisible(!this.state.symbolsVisible) }
-          />
+          >
+            <Icon
+              name="adjust"
+              color="rgb(94, 188, 241)"
+            />
+            <Text style={{ color: 'rgb(94, 188, 241)' }}> SYMBOLS</Text>
+          </Badge>
         </View>
         <Symbols visible={ this.state.symbolsVisible } parent={ this } />
         <View style={{ flexDirection: 'row' }}>
