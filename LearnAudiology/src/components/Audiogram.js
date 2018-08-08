@@ -186,7 +186,7 @@ class Audiogram extends React.Component {
             reverseColor="#fff"
           />
           <Button
-            buttonStyle={{ height: 30 }}
+            raised
             icon={{name: 'adjust'}}
             title="SYMBOLS"
             backgroundColor="rgb(94, 188, 241)"
@@ -246,6 +246,7 @@ class Audiogram extends React.Component {
         </View>
         <View>
           <Button
+            raised
             icon={{name: 'timeline'}}
             title="ADD POINTS"
             backgroundColor="rgb(94, 188, 241)"
