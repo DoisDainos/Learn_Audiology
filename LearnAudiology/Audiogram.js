@@ -1,29 +1,21 @@
 import React from 'react';
-import { StyleSheet, Text, View, Button} from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { Header } from 'react-native-elements';
-import { createStackNavigator } from 'react-navigation';
+import Audiogram from './src/components/Audiogram'
+
 const dataModule = require('./src/utils/data');
 const getGraph = dataModule.getGraph;
 const saveGraph = dataModule.saveGraph;
 const deleteGraph = dataModule.deleteGraph;
 
-/** Put other loadable screens here **/
-import Home from './Home';
-import Test from './TestPage';
-import Graph from './Audiogram';
-
-/** Stack based navigater**/
-const LearnAudiology = createStackNavigator({
-  //don't forget commas
-  Home: {screen: Home},
-  Graph: {screen: Graph},
-  Test: {screen: Test}
-});
-
-export default LearnAudiology;
-
-/**
-export default class App extends React.Component {
+export default class Graph extends React.Component {
+  static navigationOptions = {
+    title: 'Audiogram',
+    headerTintColor: '#fff',
+    headerStyle: {
+      backgroundColor: 'rgb(94, 188, 241)',
+    },
+  }
   // Component successfully loaded (TEST)
   /*
   componentDidMount() {
@@ -31,13 +23,13 @@ export default class App extends React.Component {
     getGraph('test');
     deleteGraph('test');
   }
-  /
+  */
   render() {
     // TEMP data for audiogram
     const pointsACLeft = [
       {
-        Hz: 125,
-        dB: 20
+        Hz: 250,
+        dB: 10
       },
       {
         Hz: 500,
@@ -91,15 +83,6 @@ export default class App extends React.Component {
       }
     ];
     return ([
-
-      <Header
-        key={0}
-        outerContainerStyles={{ backgroundColor: 'rgb(94, 188, 241)' }}
-        centerComponent={{ text: 'Learn Audiology', style: {
-            color: '#fff',
-            fontSize: 17
-        } }}
-      />,
       <View key={1} style={styles.container}>
         <Text key={2}>Learn Audiology - Team Tam :)</Text>
       </View>,
@@ -113,7 +96,7 @@ export default class App extends React.Component {
     ]);
   }
 }
-*/
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
