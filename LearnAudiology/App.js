@@ -1,11 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View, Button} from 'react-native';
-import { Header } from 'react-native-elements';
 import { createStackNavigator } from 'react-navigation';
-const dataModule = require('./src/utils/data');
-const getGraph = dataModule.getGraph;
-const saveGraph = dataModule.saveGraph;
-const deleteGraph = dataModule.deleteGraph;
 
 /** Put other loadable screens here **/
 import Home from './Home';
