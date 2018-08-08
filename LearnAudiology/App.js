@@ -1,5 +1,10 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  ScrollView
+} from 'react-native';
 import { Header } from 'react-native-elements';
 import Audiogram from './src/components/Audiogram'
 
@@ -77,23 +82,20 @@ export default class App extends React.Component {
     ];
     return ([
       <Header
-        key={0}
+        key={ 0 }
         outerContainerStyles={{ backgroundColor: 'rgb(94, 188, 241)' }}
         centerComponent={{ text: 'Learn Audiology', style: {
             color: '#fff',
             fontSize: 17
         } }}
       />,
-      <View key={1} style={styles.container}>
-        <Text key={2}>Learn Audiology - Team Tam :)</Text>
-      </View>,
-      <View key={3} style={ { height: 500 } }>
+      <ScrollView key={ 3 }>
         <Audiogram
-          key={4}
+          key={ 4 }
           pointsACRight={ pointsACRight }
           pointsACLeft={ pointsACLeft }
         />
-      </View>
+      </ScrollView>
     ]);
   }
 }

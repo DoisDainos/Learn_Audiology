@@ -1,9 +1,11 @@
 import React from 'react';
-import { View } from 'react-native';
+import { View, ScrollView, Text, TouchableHighlight } from 'react-native';
 import  { XAxis, YAxis } from 'react-native-svg-charts';
 import { Svg } from 'react-native-svg';
+import { Button, Icon } from 'react-native-elements';
 import Grid from './audiogram_parts/Grid';
 import Points from './audiogram_parts/Points';
+import Symbols from './audiogram_parts/Symbols';
 
 /*
  * Props:
@@ -17,8 +19,19 @@ import Points from './audiogram_parts/Points';
  * - TODO pointsBCLeftMask [icon: 'https://i.imgur.com/PO8NtHf.png?1']
  */
 class Audiogram extends React.Component {
+  state = {
+    symbolsVisible: false
+  };
+
   constructor(props) {
     super(props);
+  }
+
+  /*
+   * Set symbols modal visibility (true/false).
+   */
+  setSymbolsVisible(visible) {
+    this.setState({ symbolsVisible: visible });
   }
 
   /*
@@ -157,53 +170,85 @@ class Audiogram extends React.Component {
     const indexes = [ 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0 ];
 
     return (
-      <View style={{ height: 400, flexDirection: 'row' }}>
-        <View style={{ position: 'absolute', paddingLeft: 10, paddingTop: 8,
-        paddingBottom: 5, height: 440, flexDirection: 'row' }}>
-          <YAxis
-            data={ dBsMain }
-            style={{ marginBottom: 30 }}
-            formatLabel={ (value, index) => dBsLabels[indexes[index]] }
-            contentInset={{ top: 10, bottom: 10 }}
-            svg={{ fontSize: 8, fill: 'grey' }}
+      <View>
+        <View style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'center',
+          height: 50
+        }}>
+          <Icon
+            size={ 20 }
+            name="save"
+            raised
+            reverse
+            color='rgb(94, 188, 241)'
+            reverseColor="#fff"
+          />
+          <Button
+            buttonStyle={{ height: 30 }}
+            icon={{name: 'adjust'}}
+            title="SYMBOLS"
+            backgroundColor="rgb(94, 188, 241)"
+            onPress={() => this.setSymbolsVisible(!this.state.symbolsVisible) }
           />
         </View>
-        <View style={{ paddingRight: 20, paddingLeft: 15, flex: 1 }}>
-          <Svg
-            height="400"
-            width="100%"
-          >
-            <Grid
-              xGridLines={ xGridLines }
-              yGridLines={ yGridLines }
-              dBsMain={ dBsMain }
-              dBsMinor={ dBsMinor }
-              frequencies={ frequenciesGrid }
+        <Symbols visible={ this.state.symbolsVisible } parent={ this } />
+        <View style={{ flexDirection: 'row' }}>
+          <View style={{ position: 'absolute', paddingLeft: 10, paddingTop: 8,
+          paddingBottom: 5, height: 440, flexDirection: 'row' }}>
+            <YAxis
+              data={ dBsMain }
+              style={{ marginBottom: 30 }}
+              formatLabel={ (value, index) => dBsLabels[indexes[index]] }
+              contentInset={{ top: 10, bottom: 10 }}
+              svg={{ fontSize: 8, fill: 'grey' }}
             />
-            {this.props.pointsACRight != null &&
-              this.props.pointsACRight.length > 0 &&
-              <Points
-                data={ this.props.pointsACRight }
+          </View>
+          <View style={{ paddingRight: 20, paddingLeft: 15, flex: 1 }}>
+            <Svg
+              height="400"
+              width="100%"
+            >
+              <Grid
                 xGridLines={ xGridLines }
                 yGridLines={ yGridLines }
+                dBsMain={ dBsMain }
+                dBsMinor={ dBsMinor }
+                frequencies={ frequenciesGrid }
               />
-            }
-            {this.props.pointsACLeft != null &&
-              this.props.pointsACLeft.length > 0 &&
-              <Points
-                data={ this.props.pointsACLeft }
-                xGridLines={ xGridLines }
-                yGridLines={ yGridLines }
-              />
-            }
-          </Svg>
-          <XAxis
-            style={{ marginHorizontal: -10, height: 30, paddingTop: 3,
-              paddingLeft: 45, paddingRight: 10 }}
-            data={ frequencies }
-            formatLabel={ (value, index) => frequencies[index] }
-            contentInset={{ left: 10, right: 10 }}
-            svg={{ fontSize: 8, fill: 'grey' }}
+              {this.props.pointsACRight != null &&
+                this.props.pointsACRight.length > 0 &&
+                <Points
+                  data={ this.props.pointsACRight }
+                  xGridLines={ xGridLines }
+                  yGridLines={ yGridLines }
+                />
+              }
+              {this.props.pointsACLeft != null &&
+                this.props.pointsACLeft.length > 0 &&
+                <Points
+                  data={ this.props.pointsACLeft }
+                  xGridLines={ xGridLines }
+                  yGridLines={ yGridLines }
+                />
+              }
+            </Svg>
+            <XAxis
+              style={{ marginHorizontal: -10, height: 30, paddingTop: 3,
+                paddingLeft: 45, paddingRight: 10 }}
+              data={ frequencies }
+              formatLabel={ (value, index) => frequencies[index] }
+              contentInset={{ left: 10, right: 10 }}
+              svg={{ fontSize: 8, fill: 'grey' }}
+            />
+          </View>
+        </View>
+        <View>
+          <Button
+            icon={{name: 'timeline'}}
+            title="ADD POINTS"
+            backgroundColor="rgb(94, 188, 241)"
           />
         </View>
       </View>
