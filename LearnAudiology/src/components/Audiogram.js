@@ -5,7 +5,8 @@ import { Svg } from 'react-native-svg';
 import { Button, Icon, Badge } from 'react-native-elements';
 import Grid from './audiogram_parts/Grid';
 import Points from './audiogram_parts/Points';
-import Symbols from './audiogram_parts/Symbols';
+import SymbolsModal from './audiogram_parts/SymbolsModal';
+import PointsModal from './audiogram_parts/PointsModal';
 
 /*
  * Props:
@@ -22,7 +23,9 @@ import Symbols from './audiogram_parts/Symbols';
  */
 class Audiogram extends React.Component {
   state = {
-    symbolsVisible: false
+    symbolsVisible: false,
+    pointsVisible: false,
+    pointsToModal: []
   };
 
   constructor(props) {
@@ -34,6 +37,13 @@ class Audiogram extends React.Component {
    */
   setSymbolsVisible(visible) {
     this.setState({ symbolsVisible: visible });
+  }
+
+  /*
+   * Set symbols modal visibility (true/false).
+   */
+  setPointsVisible(visible) {
+    this.setState({ pointsVisible: visible });
   }
 
   /*
@@ -116,6 +126,32 @@ class Audiogram extends React.Component {
     }
   }
 
+  getPointsAtFreq(frequency) {
+    points = [];
+    if (this.props.pointsACRight != null) {
+      for (var i=0; i<this.props.pointsACRight.length; i++) {
+        if (this.props.pointsACRight[i].Hz === frequency) {
+          points.push(this.props.pointsACRight[i]);
+        }
+      }
+    }
+    if (this.props.pointsACLeft != null) {
+      for (var i=0; i<this.props.pointsACLeft.length; i++) {
+        if (this.props.pointsACLeft[i].Hz === frequency) {
+          points.push(this.props.pointsACLeft[i]);
+        }
+      }
+    }
+    return points;
+  }
+
+  displayPointsModal(points) {
+    this.setState({
+      pointsVisible: !this.props.visible,
+      pointsToModal: points
+    });
+  }
+
   render() {
     if (this.props.pointsACRight != null) {
       // Add necessary information to each air conduction, right ear point
@@ -196,7 +232,12 @@ class Audiogram extends React.Component {
             <Text style={{ color: 'rgb(94, 188, 241)' }}> SYMBOLS</Text>
           </Badge>
         </View>
-        <Symbols visible={ this.state.symbolsVisible } parent={ this } />
+        <SymbolsModal visible={ this.state.symbolsVisible } parent={ this } />
+        <PointsModal
+          visible={ this.state.pointsVisible }
+          points={ this.state.pointsToModal }
+          parent={ this }
+        />
         <View style={{ flexDirection: 'row' }}>
           <View style={{ position: 'absolute', paddingLeft: 10, paddingTop: 8,
           paddingBottom: 5, height: 440, flexDirection: 'row' }}>
@@ -219,6 +260,7 @@ class Audiogram extends React.Component {
                 dBsMain={ dBsMain }
                 dBsMinor={ dBsMinor }
                 frequencies={ frequenciesGrid }
+                parent={ this }
               />
               {this.props.pointsACRight != null &&
                 this.props.pointsACRight.length > 0 &&
@@ -256,7 +298,7 @@ class Audiogram extends React.Component {
           />
         </View>
       </View>
-    )
+    );
   }
 }
 

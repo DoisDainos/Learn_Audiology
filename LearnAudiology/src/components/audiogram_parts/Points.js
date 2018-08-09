@@ -67,6 +67,6 @@ const Points = (props) => {
       }
     </G>
   );
-}
+};
 
 export default Points;
