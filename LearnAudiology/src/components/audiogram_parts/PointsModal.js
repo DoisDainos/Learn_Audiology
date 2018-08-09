@@ -1,5 +1,11 @@
 import React from 'react';
-import { Text, View, Modal, TouchableHighlight, Image } from 'react-native';
+import {
+  Text,
+  View,
+  Modal,
+  Image,
+  TouchableOpacity
+} from 'react-native';
 import { Badge, Icon, Button, Divider } from 'react-native-elements';
 
 class PointsModal extends React.Component {
@@ -29,7 +35,7 @@ class PointsModal extends React.Component {
             alert('Modal has been closed.');
           }}
         >
-          <TouchableHighlight
+          <TouchableOpacity
             style={{
               justifyContent: 'center',
               flex: 1,
@@ -97,13 +103,17 @@ class PointsModal extends React.Component {
                   borderColor: 'rgb(94, 188, 241)',
                   borderWidth: 2
                 }}
+                onPress={() => {
+                  this.props.parent.setPointsVisible(!this.props.visible);
+                }}
+                component={ TouchableOpacity }
                 size={ 20 }
                 reverse
                 color="#fff"
                 reverseColor="rgb(94, 188, 241)"
               />
             </View>
-          </TouchableHighlight>
+          </TouchableOpacity>
         </Modal>
       </View>
     );

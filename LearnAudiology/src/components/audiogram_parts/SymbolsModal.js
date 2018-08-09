@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, Modal, TouchableHighlight, Image } from 'react-native';
+import { Text, View, Modal, Image, TouchableOpacity } from 'react-native';
 import { Badge, Icon } from 'react-native-elements';
 
 const Symbols = (props) => {
@@ -13,7 +13,7 @@ const Symbols = (props) => {
           alert('Modal has been closed.');
         }}
       >
-        <TouchableHighlight
+        <TouchableOpacity
           style={{
             justifyContent: 'center',
             flex: 1,
@@ -145,13 +145,17 @@ const Symbols = (props) => {
                 borderColor: 'rgb(94, 188, 241)',
                 borderWidth: 2
               }}
+              onPress={() => {
+                props.parent.setSymbolsVisible(!props.visible);
+              }}
+              component={ TouchableOpacity }
               size={ 20 }
               reverse
               color="#fff"
               reverseColor="rgb(94, 188, 241)"
             />
           </View>
-        </TouchableHighlight>
+        </TouchableOpacity>
       </Modal>
     </View>
   );
