@@ -19,10 +19,10 @@ import AddPoints from './src/components/AddPoints';
 /** Stack based navigater**/
 const LearnAudiology = createStackNavigator({
   //don't forget commas
-  Home: {screen: Home},
-  Graph: {screen: Graph},
-  Test: {screen: Test},
-  AddPoints: {screen: AddPoints}
+  Home: { screen: Home },
+  Graph: { screen: Graph },
+  Test: { screen: Test },
+  AddPoints: { screen: AddPoints }
 }, {
   cardStyle: { backgroundColor: '#fff' }
 });

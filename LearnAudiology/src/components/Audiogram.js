@@ -1,5 +1,11 @@
 import React from 'react';
-import { View, ScrollView, Text, TouchableHighlight } from 'react-native';
+import {
+  View,
+  ScrollView,
+  Text,
+  TouchableHighlight,
+  TouchableOpacity
+} from 'react-native';
 import  { XAxis, YAxis } from 'react-native-svg-charts';
 import { Svg } from 'react-native-svg';
 import { Button, Icon, Badge } from 'react-native-elements';
@@ -418,14 +424,47 @@ class Audiogram extends React.Component {
             />
           </View>
         </View>
-        <View style={{ height: 70 }}>
-          <Button
-            raised
-            icon={{ name: 'timeline' }}
-            title="ADD POINTS"
-            backgroundColor="rgb(94, 188, 241)"
-            onPress={ this.addPointsPress }
-          />
+        <View style={{
+          justifyContent: 'center',
+          flexDirection: 'row',
+          alignItems: 'center'
+        }}>
+          <View
+            style={{
+              justifyContent: 'center',
+              height: 70
+            }}
+          >
+            <Button
+              raised
+              icon={{ name: 'timeline' }}
+              title="ADD POINTS"
+              backgroundColor="rgb(94, 188, 241)"
+              onPress={ this.addPointsPress }
+            />
+          </View>
+          <View style={{ right: 0, position: 'absolute', marginRight: 20 }}>
+            <Badge
+              containerStyle={{
+                borderColor: 'rgb(94, 188, 241)',
+                borderWidth: 2,
+                backgroundColor: '#fff'
+              }}
+              onPress={() => {
+                console.log('pressed mask');
+              }}
+            >
+              <Icon
+                name="pulse"
+                type="material-community"
+                size={ 15 }
+                color="rgb(94, 188, 241)"
+              />
+              <Text style={{ fontSize: 12, color: 'rgb(94, 188, 241)' }}>
+                MASK
+              </Text>
+            </Badge>
+          </View>
         </View>
       </ScrollView>
     );

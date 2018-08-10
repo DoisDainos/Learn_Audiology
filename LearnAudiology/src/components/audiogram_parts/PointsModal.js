@@ -41,7 +41,7 @@ class PointsModal extends React.Component {
               flex: 1,
               alignItems: 'center',
               backgroundColor: 'rgba(0,0,0,0.3)',
-              marginTop: '12.5%'
+              marginTop: '15.5%'
             }}
             onPress={() => {
               this.props.parent.setPointsVisible(!this.props.visible);
