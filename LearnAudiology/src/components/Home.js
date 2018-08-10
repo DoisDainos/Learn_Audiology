@@ -8,10 +8,14 @@ class Home extends React.Component {
     return (
       <View>
         <Text style={ styles.heading }>Press a Button</Text>
-        <Button onPress={() => navigate('Graph')} title='Audiogram'/>
-        <Button color="red" onPress={() => {console.log('Working')}, () => navigate('Test')} title='Saved Graphs'/>
-        <Button onPress={() => navigate('Test')} title='Test Yourself'/>
-        <Button onPress={() => navigate('Test')} title='Settings'/>
+        <Button onPress={ () => navigate('Graph') } title='Audiogram'/>
+        <Button
+          color="red"
+          onPress={ () => {console.log('Working') }, () => navigate('Test') }
+          title='Saved Graphs'
+        />
+        <Button onPress={ () => navigate('Test') } title='Test Yourself'/>
+        <Button onPress={ () => navigate('Test') } title='Settings'/>
         <TouchableOpacity
            style={{
                borderWidth:0,
