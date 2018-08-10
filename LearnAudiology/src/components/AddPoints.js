@@ -21,12 +21,42 @@ class AddPoints extends React.Component {
 
   constructor(props) {
     super()
+    this.addPoint = this.addPoint.bind(this);
     this.updateIndexEar = this.updateIndexEar.bind(this);
     this.updateIndexCon = this.updateIndexCon.bind(this);
     this.increaseFreq = this.increaseFreq.bind(this);
     this.decreaseFreq = this.decreaseFreq.bind(this);
     this.increaseHear = this.increaseHear.bind(this);
     this.decreaseHear = this.decreaseHear.bind(this);
+  }
+
+  /*
+   * Add point to suitable array.
+   */
+  addPoint() {
+    let navParams = this.props.navigation.state.params;
+    if (this.state.selectedIndexEar === 2 ||
+      this.state.selectedIndexCon === 2) {
+      console.log('Choose an ear and conduction');
+      return;
+    }
+    let point = {
+      Hz: this.state.frequency,
+      dB: this.state.hearingLevel
+    };
+    if (this.state.selectedIndexEar === 0) { // Right ear
+      if (this.state.selectedIndexCon === 0) { // Right ear -> air conduction
+        navParams.addPointACRight(point);
+      } else { // Right ear -> bone conduction
+        navParams.addPointBCRight(point);
+      }
+    } else { // Left ear
+      if (this.state.selectedIndexCon === 0) { // Left ear -> air conduction
+        navParams.addPointACLeft(point);
+      } else { // Left ear -> bone conduction
+        navParams.addPointBCLeft(point);
+      }
+    }
   }
 
   /*
@@ -239,6 +269,7 @@ class AddPoints extends React.Component {
             raised
             title="SUBMIT"
             backgroundColor="rgb(94, 188, 241)"
+            onPress={ this.addPoint }
           />
         </View>
       </ScrollView>

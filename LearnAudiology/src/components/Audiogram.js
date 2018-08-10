@@ -12,8 +12,8 @@ import PointsModal from './audiogram_parts/PointsModal';
  * Props:
  * - pointsACRight
  * - pointsACLeft
- * - TODO pointsBCRight [icon: 'https://i.imgur.com/kv5twnR.png']
- * - TODO pointsBCLeft [icon: 'https://i.imgur.com/2q2Nglb.png']
+ * - pointsBCRight
+ * - pointsBCLeft
  * - TODO pointsACRightMask [icon: 'https://i.imgur.com/PFXczIl.png']
  * - TODO pointsACLeftMask [icon: 'https://i.imgur.com/6KrOAuH.png']
  * - TODO pointsBCRightMask [icon: 'https://i.imgur.com/u4Zfi3I.png?1']
@@ -33,11 +33,67 @@ class Audiogram extends React.Component {
   state = {
     symbolsVisible: false,
     pointsVisible: false,
-    pointsToModal: []
+    pointsToModal: [],
+    pointsACRight: [],
+    pointsACLeft: [],
+    pointsBCRight: [],
+    pointsBCLeft: []
   };
 
   constructor(props) {
     super(props);
+    this.addPointsPress = this.addPointsPress.bind(this);
+  }
+
+  /*
+   * Handle pressing of add points button.
+   */
+  addPointsPress() {
+    this.props.navigation.push(
+      'AddPoints',
+      {
+        addPointACRight: this.addPointACRight.bind(this),
+        addPointACLeft: this.addPointACLeft.bind(this),
+        addPointBCRight: this.addPointBCRight.bind(this),
+        addPointBCLeft: this.addPointBCLeft.bind(this)
+      }
+    );
+  }
+
+  /*
+   * Add to air conduction right ear unmasked point array.
+   */
+  addPointACRight(point) {
+    this.setState({
+      pointsACRight: this.state.pointsACRight.concat([point])
+    });
+  }
+
+  /*
+   * Add to air conduction left ear unmasked point array.
+   */
+  addPointACLeft(point) {
+    this.setState({
+      pointsACLeft: this.state.pointsACLeft.concat([point])
+    });
+  }
+
+  /*
+   * Add to bone conduction right ear unmasked point array.
+   */
+  addPointBCRight(point) {
+    this.setState({
+      pointsBCRight: this.state.pointsBCRight.concat([point])
+    });
+  }
+
+  /*
+   * Add to bone conduction left ear unmasked point array.
+   */
+  addPointBCLeft(point) {
+    this.setState({
+      pointsBCLeft: this.state.pointsBCLeft.concat([point])
+    });
   }
 
   /*
@@ -72,32 +128,54 @@ class Audiogram extends React.Component {
    * - masked: is point masked boolean value
    */
   removePoint(frequency, conduction, ear, masked) {
-    if (this.props.pointsACRight != null) {
-      if (conduction === 'air' && ear === 'left' && masked === false) {
-        for (var i=0; i<this.props.pointsACRight.length; i++) {
-          if (this.props.pointsACRight[i].Hz === frequency) {
-            var index = this.props.pointsACRight.indexOf(
-              this.props.pointsACRight[i]
-            );
-            if (index > -1) {
-              this.props.pointsACRight.splice(index, 1);
-              return;
-            }
+    if (conduction === 'air' && ear === 'left' && masked === false) {
+      for (var i=0; i<this.state.pointsACRight.length; i++) {
+        if (this.state.pointsACRight[i].Hz === frequency) {
+          var index = this.state.pointsACRight.indexOf(
+            this.state.pointsACRight[i]
+          );
+          if (index > -1) {
+            this.state.pointsACRight.splice(index, 1);
+            return;
           }
         }
       }
     }
-    if (this.props.pointsACLeft != null) {
-      if (conduction === 'air' && ear === 'left' && masked === false) {
-        for (var i=0; i<this.props.pointsACLeft.length; i++) {
-          if (this.props.pointsACLeft[i].Hz === frequency) {
-            var index = this.props.pointsACLeft.indexOf(
-              this.props.pointsACLeft[i]
-            );
-            if (index > -1) {
-              this.props.pointsACLeft.splice(index, 1);
-              return;
-            }
+    if (conduction === 'air' && ear === 'left' && masked === false) {
+      for (var i=0; i<this.state.pointsACLeft.length; i++) {
+        if (this.state.pointsACLeft[i].Hz === frequency) {
+          var index = this.state.pointsACLeft.indexOf(
+            this.state.pointsACLeft[i]
+          );
+          if (index > -1) {
+            this.state.pointsACLeft.splice(index, 1);
+            return;
+          }
+        }
+      }
+    }
+    if (conduction === 'bone' && ear === 'right' && masked === false) {
+      for (var i=0; i<this.state.pointsBCRight.length; i++) {
+        if (this.state.pointsBCRight[i].Hz === frequency) {
+          var index = this.state.pointsBCRight.indexOf(
+            this.state.pointsBCRight[i]
+          );
+          if (index > -1) {
+            this.state.pointsBCRight.splice(index, 1);
+            return;
+          }
+        }
+      }
+    }
+    if (conduction === 'bone' && ear === 'left' && masked === false) {
+      for (var i=0; i<this.state.pointsBCLeft.length; i++) {
+        if (this.state.pointsBCLeft[i].Hz === frequency) {
+          var index = this.state.pointsBCLeft.indexOf(
+            this.state.pointsBCLeft[i]
+          );
+          if (index > -1) {
+            this.state.pointsBCLeft.splice(index, 1);
+            return;
           }
         }
       }
@@ -114,40 +192,59 @@ class Audiogram extends React.Component {
    * - newLevel: new dB hearing level for the point
    */
   replacePoint(frequency, conduction, ear, masked, newLevel) {
-    if (this.props.pointsACRight != null) {
-      if (conduction === 'air' && ear === 'right' && masked === false) {
-        for (var i=0; i<this.props.pointsACRight.length; i++) {
-          if (this.props.pointsACRight[i].Hz === frequency) {
-            this.props.pointsACRight[i].dB = newLevel;
-          }
+    if (conduction === 'air' && ear === 'right' && masked === false) {
+      for (var i=0; i<this.state.pointsACRight.length; i++) {
+        if (this.state.pointsACRight[i].Hz === frequency) {
+          this.state.pointsACRight[i].dB = newLevel;
         }
       }
     }
-    if (this.props.pointsACLeft != null) {
-      if (conduction === 'air' && ear === 'left' && masked === false) {
-        for (var i=0; i<this.props.pointsACLeft.length; i++) {
-          if (this.props.pointsACLeft[i].Hz === frequency) {
-            this.props.pointsACLeft[i].dB = newLevel;
-          }
+    if (conduction === 'air' && ear === 'left' && masked === false) {
+      for (var i=0; i<this.state.pointsACLeft.length; i++) {
+        if (this.state.pointsACLeft[i].Hz === frequency) {
+          this.state.pointsACLeft[i].dB = newLevel;
+        }
+      }
+    }
+    if (conduction === 'bone' && ear === 'right' && masked === false) {
+      for (var i=0; i<this.state.pointsBCRight.length; i++) {
+        if (this.state.pointsBCRight[i].Hz === frequency) {
+          this.state.pointsBCRight[i].dB = newLevel;
+        }
+      }
+    }
+    if (conduction === 'bone' && ear === 'left' && masked === false) {
+      for (var i=0; i<this.state.pointsBCLeft.length; i++) {
+        if (this.state.pointsBCLeft[i].Hz === frequency) {
+          this.state.pointsBCLeft[i].dB = newLevel;
         }
       }
     }
   }
 
+  /*
+   * Return array of all points with a particular frequency.
+   */
   getPointsAtFreq(frequency) {
     points = [];
-    if (this.props.pointsACRight != null) {
-      for (var i=0; i<this.props.pointsACRight.length; i++) {
-        if (this.props.pointsACRight[i].Hz === frequency) {
-          points.push(this.props.pointsACRight[i]);
-        }
+    for (var i=0; i<this.state.pointsACRight.length; i++) {
+      if (this.state.pointsACRight[i].Hz === frequency) {
+        points.push(this.state.pointsACRight[i]);
       }
     }
-    if (this.props.pointsACLeft != null) {
-      for (var i=0; i<this.props.pointsACLeft.length; i++) {
-        if (this.props.pointsACLeft[i].Hz === frequency) {
-          points.push(this.props.pointsACLeft[i]);
-        }
+    for (var i=0; i<this.state.pointsACLeft.length; i++) {
+      if (this.state.pointsACLeft[i].Hz === frequency) {
+        points.push(this.state.pointsACLeft[i]);
+      }
+    }
+    for (var i=0; i<this.state.pointsBCRight.length; i++) {
+      if (this.state.pointsBCRight[i].Hz === frequency) {
+        points.push(this.state.pointsBCRight[i]);
+      }
+    }
+    for (var i=0; i<this.state.pointsBCLeft.length; i++) {
+      if (this.state.pointsBCLeft[i].Hz === frequency) {
+        points.push(this.state.pointsBCLeft[i]);
       }
     }
     return points;
@@ -155,41 +252,51 @@ class Audiogram extends React.Component {
 
   displayPointsModal(points) {
     this.setState({
-      pointsVisible: !this.props.visible,
+      pointsVisible: !this.state.pointsVisible,
       pointsToModal: points
     });
   }
 
   render() {
-    const { navigate } = this.props.navigation;
-
-    if (this.props.pointsACRight != null) {
-      // Add necessary information to each air conduction, right ear point
-      for (var i=0; i<this.props.pointsACRight.length; i++) {
-        this.props.pointsACRight[i]['colour'] = 'rgb(255, 6, 0)';
-        this.props.pointsACRight[i]['conduction'] = 'air';
-        this.props.pointsACRight[i]['ear'] = 'right';
-        this.props.pointsACRight[i]['image'] =
-          'https://i.imgur.com/BtWXB20.png'
-        this.props.pointsACRight[i]['masked'] = false;
-      }
-      // Sort array of points
-      this.props.pointsACRight.sort(this.comparePoints);
+    // Add necessary information to each air conduction, right ear point
+    for (var i=0; i<this.state.pointsACRight.length; i++) {
+      this.state.pointsACRight[i]['colour'] = 'rgb(255, 6, 0)';
+      this.state.pointsACRight[i]['image'] =
+        'https://i.imgur.com/BtWXB20.png'
+      this.state.pointsACRight[i]['masked'] = false;
     }
+    // Sort array of points
+    this.state.pointsACRight.sort(this.comparePoints);
 
-    if (this.props.pointsACLeft != null) {
-      // Add necessary information to each air conduction, left ear point
-      for (var i=0; i<this.props.pointsACLeft.length; i++) {
-        this.props.pointsACLeft[i]['colour'] = 'rgb(0, 26, 255)';
-        this.props.pointsACLeft[i]['conduction'] = 'air';
-        this.props.pointsACLeft[i]['ear'] = 'left;'
-        this.props.pointsACLeft[i]['image'] =
-          'https://i.imgur.com/VqJdazw.png';
-        this.props.pointsACLeft[i]['masked'] = false;
-      }
-      // Sort array of points
-      this.props.pointsACLeft.sort(this.comparePoints);
+    // Add necessary information to each air conduction, left ear point
+    for (var i=0; i<this.state.pointsACLeft.length; i++) {
+      this.state.pointsACLeft[i]['colour'] = 'rgb(0, 26, 255)';
+      this.state.pointsACLeft[i]['image'] =
+        'https://i.imgur.com/VqJdazw.png';
+      this.state.pointsACLeft[i]['masked'] = false;
     }
+    // Sort array of points
+    this.state.pointsACLeft.sort(this.comparePoints);
+
+    // Add necessary information to each bone conduction, right ear point
+    for (var i=0; i<this.state.pointsBCRight.length; i++) {
+      this.state.pointsBCRight[i]['colour'] = 'rgb(255, 6, 0)';
+      this.state.pointsBCRight[i]['image'] =
+        'https://i.imgur.com/kv5twnR.png'
+      this.state.pointsBCRight[i]['masked'] = false;
+    }
+    // Sort array of points
+    this.state.pointsBCRight.sort(this.comparePoints);
+
+    // Add necessary information to each bone conduction, left ear point
+    for (var i=0; i<this.state.pointsBCLeft.length; i++) {
+      this.state.pointsBCLeft[i]['colour'] = 'rgb(0, 26, 255)';
+      this.state.pointsBCLeft[i]['image'] =
+        'https://i.imgur.com/2q2Nglb.png'
+      this.state.pointsBCLeft[i]['masked'] = false;
+    }
+    // Sort array of points
+    this.state.pointsBCLeft.sort(this.comparePoints);
 
     // Reference values for vertical gridlines (frequencies)
     const yGridLines = [ '5%', '14.28%', '28.13%', '41.98%', '55.83%',
@@ -272,18 +379,30 @@ class Audiogram extends React.Component {
                 frequencies={ frequenciesGrid }
                 parent={ this }
               />
-              {this.props.pointsACRight != null &&
-                this.props.pointsACRight.length > 0 &&
+              {this.state.pointsACRight.length > 0 &&
                 <Points
-                  data={ this.props.pointsACRight }
+                  data={ this.state.pointsACRight }
                   xGridLines={ xGridLines }
                   yGridLines={ yGridLines }
                 />
               }
-              {this.props.pointsACLeft != null &&
-                this.props.pointsACLeft.length > 0 &&
+              {this.state.pointsACLeft.length > 0 &&
                 <Points
-                  data={ this.props.pointsACLeft }
+                  data={ this.state.pointsACLeft }
+                  xGridLines={ xGridLines }
+                  yGridLines={ yGridLines }
+                />
+              }
+              {this.state.pointsBCRight.length > 0 &&
+                <Points
+                  data={ this.state.pointsBCRight }
+                  xGridLines={ xGridLines }
+                  yGridLines={ yGridLines }
+                />
+              }
+              {this.state.pointsBCLeft.length > 0 &&
+                <Points
+                  data={ this.state.pointsBCLeft }
                   xGridLines={ xGridLines }
                   yGridLines={ yGridLines }
                 />
@@ -305,7 +424,7 @@ class Audiogram extends React.Component {
             icon={{ name: 'timeline' }}
             title="ADD POINTS"
             backgroundColor="rgb(94, 188, 241)"
-            onPress={ () => navigate('AddPoints') }
+            onPress={ this.addPointsPress }
           />
         </View>
       </ScrollView>
