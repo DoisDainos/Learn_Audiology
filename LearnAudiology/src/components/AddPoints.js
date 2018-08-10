@@ -125,15 +125,26 @@ class AddPoints extends React.Component {
         <Text style={ styles.heading }>Frequency</Text>
         <View style={{ alignItems: 'center', justifyContent: 'center' }}>
           <View style={{ flexDirection: 'row' }}>
-            <Icon
-              size={ 35 }
-              name="remove"
-              color="rgb(140, 140, 140)"
-              reverse
-              reverseColor="#fff"
-              onPress={ this.decreaseFreq }
-              component={ TouchableOpacity }
-            />
+            {this.state.frequency > 125 &&
+              <Icon
+                size={ 35 }
+                name="remove"
+                color="rgb(140, 140, 140)"
+                reverse
+                reverseColor="#fff"
+                onPress={ this.decreaseFreq }
+                component={ TouchableOpacity }
+              />
+            }
+            {this.state.frequency === 125 &&
+              <Icon
+                size={ 35 }
+                name="remove"
+                color="rgb(230, 230, 230)"
+                reverse
+                reverseColor="#fff"
+              />
+            }
             <View style={{ width: 125, justifyContent: 'center' }}>
               <Text
                 style={{
@@ -145,29 +156,51 @@ class AddPoints extends React.Component {
                 { this.state.frequency }Hz
               </Text>
             </View>
-            <Icon
-              size={ 35 }
-              name="add"
-              color="rgb(140, 140, 140)"
-              reverse
-              reverseColor="#fff"
-              onPress={ this.increaseFreq }
-              component={ TouchableOpacity }
-            />
+              {this.state.frequency < 8000 &&
+                <Icon
+                  size={ 35 }
+                  name="add"
+                  color="rgb(140, 140, 140)"
+                  reverse
+                  reverseColor="#fff"
+                  onPress={ this.increaseFreq }
+                  component={ TouchableOpacity }
+                />
+              }
+              {this.state.frequency === 8000 &&
+                <Icon
+                  size={ 35 }
+                  name="add"
+                  color="rgb(230, 230, 230)"
+                  reverse
+                  reverseColor="#fff"
+                />
+              }
           </View>
         </View>
         <Text style={ styles.heading }>Hearing level</Text>
         <View style={{ alignItems: 'center', justifyContent: 'center' }}>
           <View style={{ flexDirection: 'row' }}>
-            <Icon
-              size={ 35 }
-              name="remove"
-              color="rgb(140, 140, 140)"
-              reverse
-              reverseColor="#fff"
-              onPress={ this.decreaseHear }
-              component={ TouchableOpacity }
-            />
+            {this.state.hearingLevel > -10 &&
+              <Icon
+                size={ 35 }
+                name="remove"
+                color="rgb(140, 140, 140)"
+                reverse
+                reverseColor="#fff"
+                onPress={ this.decreaseHear }
+                component={ TouchableOpacity }
+              />
+            }
+            {this.state.hearingLevel === -10 &&
+              <Icon
+                size={ 35 }
+                name="remove"
+                color="rgb(230, 230, 230)"
+                reverse
+                reverseColor="#fff"
+              />
+            }
             <View style={{ width: 125, justifyContent: 'center' }}>
               <Text
                 style={{
@@ -179,15 +212,26 @@ class AddPoints extends React.Component {
                 { this.state.hearingLevel }dB
               </Text>
             </View>
-            <Icon
-              size={ 35 }
-              name="add"
-              color="rgb(140, 140, 140)"
-              reverse
-              reverseColor="#fff"
-              onPress={ this.increaseHear }
-              component={ TouchableOpacity }
-            />
+            {this.state.hearingLevel < 120 &&
+              <Icon
+                size={ 35 }
+                name="add"
+                color="rgb(140, 140, 140)"
+                reverse
+                reverseColor="#fff"
+                onPress={ this.increaseHear }
+                component={ TouchableOpacity }
+              />
+            }
+            {this.state.hearingLevel === 120 &&
+              <Icon
+                size={ 35 }
+                name="add"
+                color="rgb(230, 230, 230)"
+                reverse
+                reverseColor="#fff"
+              />
+            }
           </View>
         </View>
         <View style={{ height: 130, marginTop: 15 }}>
