@@ -1,9 +1,12 @@
 import React from 'react';
-import { View } from 'react-native';
+import { View, ScrollView, Text, TouchableHighlight } from 'react-native';
 import  { XAxis, YAxis } from 'react-native-svg-charts';
 import { Svg } from 'react-native-svg';
+import { Button, Icon, Badge } from 'react-native-elements';
 import Grid from './audiogram_parts/Grid';
 import Points from './audiogram_parts/Points';
+import SymbolsModal from './audiogram_parts/SymbolsModal';
+import PointsModal from './audiogram_parts/PointsModal';
 
 /*
  * Props:
@@ -15,10 +18,40 @@ import Points from './audiogram_parts/Points';
  * - TODO pointsACLeftMask [icon: 'https://i.imgur.com/6KrOAuH.png']
  * - TODO pointsBCRightMask [icon: 'https://i.imgur.com/u4Zfi3I.png?1']
  * - TODO pointsBCLeftMask [icon: 'https://i.imgur.com/PO8NtHf.png?1']
+ * - TODO pointsNRRight [icon: 'https://i.imgur.com/Wmg6zem.png']
+ * - TODO pointsNRLeft [icon: 'https://i.imgur.com/N4NDGBm.png']
  */
 class Audiogram extends React.Component {
+  static navigationOptions = {
+    title: 'Audiogram',
+    headerTintColor: '#fff',
+    headerStyle: {
+      backgroundColor: 'rgb(94, 188, 241)',
+    },
+  }
+
+  state = {
+    symbolsVisible: false,
+    pointsVisible: false,
+    pointsToModal: []
+  };
+
   constructor(props) {
     super(props);
+  }
+
+  /*
+   * Set symbols modal visibility (true/false).
+   */
+  setSymbolsVisible(visible) {
+    this.setState({ symbolsVisible: visible });
+  }
+
+  /*
+   * Set symbols modal visibility (true/false).
+   */
+  setPointsVisible(visible) {
+    this.setState({ pointsVisible: visible });
   }
 
   /*
@@ -101,6 +134,32 @@ class Audiogram extends React.Component {
     }
   }
 
+  getPointsAtFreq(frequency) {
+    points = [];
+    if (this.props.pointsACRight != null) {
+      for (var i=0; i<this.props.pointsACRight.length; i++) {
+        if (this.props.pointsACRight[i].Hz === frequency) {
+          points.push(this.props.pointsACRight[i]);
+        }
+      }
+    }
+    if (this.props.pointsACLeft != null) {
+      for (var i=0; i<this.props.pointsACLeft.length; i++) {
+        if (this.props.pointsACLeft[i].Hz === frequency) {
+          points.push(this.props.pointsACLeft[i]);
+        }
+      }
+    }
+    return points;
+  }
+
+  displayPointsModal(points) {
+    this.setState({
+      pointsVisible: !this.props.visible,
+      pointsToModal: points
+    });
+  }
+
   render() {
     if (this.props.pointsACRight != null) {
       // Add necessary information to each air conduction, right ear point
@@ -157,57 +216,97 @@ class Audiogram extends React.Component {
     const indexes = [ 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0 ];
 
     return (
-      <View style={{ height: 400, flexDirection: 'row' }}>
-        <View style={{ position: 'absolute', paddingLeft: 10, paddingTop: 8,
-        paddingBottom: 5, height: 440, flexDirection: 'row' }}>
-          <YAxis
-            data={ dBsMain }
-            style={{ marginBottom: 30 }}
-            formatLabel={ (value, index) => dBsLabels[indexes[index]] }
-            contentInset={{ top: 10, bottom: 10 }}
-            svg={{ fontSize: 8, fill: 'grey' }}
-          />
-        </View>
-        <View style={{ paddingRight: 20, paddingLeft: 15, flex: 1 }}>
-          <Svg
-            height="400"
-            width="100%"
+      <View>
+        <View style={{
+          flexDirection: 'row',
+          alignItems: 'flex-end',
+          justifyContent: 'flex-end',
+          height: 50,
+          marginRight: 20
+        }}>
+          <Badge
+            containerStyle={{
+              borderColor: 'rgb(94, 188, 241)',
+              borderWidth: 2,
+              backgroundColor: '#fff',
+              flexDirection: 'row'
+            }}
+            onPress={() => this.setSymbolsVisible(!this.state.symbolsVisible) }
           >
-            <Grid
-              xGridLines={ xGridLines }
-              yGridLines={ yGridLines }
-              dBsMain={ dBsMain }
-              dBsMinor={ dBsMinor }
-              frequencies={ frequenciesGrid }
+            <Icon
+              name="adjust"
+              color="rgb(94, 188, 241)"
             />
-            {this.props.pointsACRight != null &&
-              this.props.pointsACRight.length > 0 &&
-              <Points
-                data={ this.props.pointsACRight }
+            <Text style={{ color: 'rgb(94, 188, 241)' }}> SYMBOLS</Text>
+          </Badge>
+        </View>
+        <SymbolsModal visible={ this.state.symbolsVisible } parent={ this } />
+        <PointsModal
+          visible={ this.state.pointsVisible }
+          points={ this.state.pointsToModal }
+          parent={ this }
+        />
+        <View style={{ flexDirection: 'row' }}>
+          <View style={{ position: 'absolute', paddingLeft: 10, paddingTop: 8,
+          paddingBottom: 5, height: 440, flexDirection: 'row' }}>
+            <YAxis
+              data={ dBsMain }
+              style={{ marginBottom: 30 }}
+              formatLabel={ (value, index) => dBsLabels[indexes[index]] }
+              contentInset={{ top: 10, bottom: 10 }}
+              svg={{ fontSize: 8, fill: 'grey' }}
+            />
+          </View>
+          <View style={{ paddingRight: 20, paddingLeft: 15, flex: 1 }}>
+            <Svg
+              height="400"
+              width="100%"
+            >
+              <Grid
                 xGridLines={ xGridLines }
                 yGridLines={ yGridLines }
+                dBsMain={ dBsMain }
+                dBsMinor={ dBsMinor }
+                frequencies={ frequenciesGrid }
+                parent={ this }
               />
-            }
-            {this.props.pointsACLeft != null &&
-              this.props.pointsACLeft.length > 0 &&
-              <Points
-                data={ this.props.pointsACLeft }
-                xGridLines={ xGridLines }
-                yGridLines={ yGridLines }
-              />
-            }
-          </Svg>
-          <XAxis
-            style={{ marginHorizontal: -10, height: 30, paddingTop: 3,
-              paddingLeft: 45, paddingRight: 10 }}
-            data={ frequencies }
-            formatLabel={ (value, index) => frequencies[index] }
-            contentInset={{ left: 10, right: 10 }}
-            svg={{ fontSize: 8, fill: 'grey' }}
+              {this.props.pointsACRight != null &&
+                this.props.pointsACRight.length > 0 &&
+                <Points
+                  data={ this.props.pointsACRight }
+                  xGridLines={ xGridLines }
+                  yGridLines={ yGridLines }
+                />
+              }
+              {this.props.pointsACLeft != null &&
+                this.props.pointsACLeft.length > 0 &&
+                <Points
+                  data={ this.props.pointsACLeft }
+                  xGridLines={ xGridLines }
+                  yGridLines={ yGridLines }
+                />
+              }
+            </Svg>
+            <XAxis
+              style={{ marginHorizontal: -10, height: 30, paddingTop: 3,
+                paddingLeft: 45, paddingRight: 10 }}
+              data={ frequencies }
+              formatLabel={ (value, index) => frequencies[index] }
+              contentInset={{ left: 10, right: 10 }}
+              svg={{ fontSize: 8, fill: 'grey' }}
+            />
+          </View>
+        </View>
+        <View>
+          <Button
+            raised
+            icon={{name: 'timeline'}}
+            title="ADD POINTS"
+            backgroundColor="rgb(94, 188, 241)"
           />
         </View>
       </View>
-    )
+    );
   }
 }
 

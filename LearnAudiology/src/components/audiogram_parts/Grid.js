@@ -60,13 +60,13 @@ const Grid = (props) => {
             stroke="none"
             fill="none"
             onPress={() => {
-              console.log('Tapped frequency: ' + props.frequencies[index + 1]);
+              props.parent.displayPointsModal(props.parent.getPointsAtFreq(props.frequencies[index + 1]));
             }}
           />
         ]))
       }
     </G>
   );
-}
+};
 
 export default Grid;
