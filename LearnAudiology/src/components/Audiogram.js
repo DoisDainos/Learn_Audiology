@@ -27,7 +27,7 @@ class Audiogram extends React.Component {
     headerTintColor: '#fff',
     headerStyle: {
       backgroundColor: 'rgb(94, 188, 241)',
-    },
+    }
   }
 
   state = {
@@ -161,6 +161,8 @@ class Audiogram extends React.Component {
   }
 
   render() {
+    const { navigate } = this.props.navigation;
+
     if (this.props.pointsACRight != null) {
       // Add necessary information to each air conduction, right ear point
       for (var i=0; i<this.props.pointsACRight.length; i++) {
@@ -216,7 +218,7 @@ class Audiogram extends React.Component {
     const indexes = [ 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0 ];
 
     return (
-      <View>
+      <ScrollView>
         <View style={{
           flexDirection: 'row',
           alignItems: 'flex-end',
@@ -297,15 +299,16 @@ class Audiogram extends React.Component {
             />
           </View>
         </View>
-        <View>
+        <View style={{ height: 70 }}>
           <Button
             raised
-            icon={{name: 'timeline'}}
+            icon={{ name: 'timeline' }}
             title="ADD POINTS"
             backgroundColor="rgb(94, 188, 241)"
+            onPress={ () => navigate('AddPoints') }
           />
         </View>
-      </View>
+      </ScrollView>
     );
   }
 }

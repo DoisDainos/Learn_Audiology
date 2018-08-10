@@ -14,13 +14,15 @@ import { createStackNavigator } from 'react-navigation';
 import Home from './src/components/Home';
 import Test from './src/components/TestPage';
 import Graph from './src/components/Audiogram';
+import AddPoints from './src/components/AddPoints';
 
 /** Stack based navigater**/
 const LearnAudiology = createStackNavigator({
   //don't forget commas
   Home: {screen: Home},
   Graph: {screen: Graph},
-  Test: {screen: Test}
+  Test: {screen: Test},
+  AddPoints: {screen: AddPoints}
 }, {
   cardStyle: { backgroundColor: '#fff' }
 });

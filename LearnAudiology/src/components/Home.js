@@ -1,12 +1,13 @@
 import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Button} from 'react-native';
+import styles from '../styles/TextStyles';
 
 class Home extends React.Component {
   render() {
     const { navigate } = this.props.navigation;
     return (
       <View>
-        <Text textAlign='center'>Press a Button</Text>
+        <Text style={ styles.heading }>Press a Button</Text>
         <Button onPress={() => navigate('Graph')} title='Audiogram'/>
         <Button color="red" onPress={() => {console.log('Working')}, () => navigate('Test')} title='Saved Graphs'/>
         <Button onPress={() => navigate('Test')} title='Test Yourself'/>
@@ -29,11 +30,5 @@ class Home extends React.Component {
     );
   }
 }
-
-const styles = {
-  buttonStyle: {
-    backgroundColor: "#ffaaa"
-  }
-};
 
 export default Home;
