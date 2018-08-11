@@ -8,6 +8,13 @@ export default StyleSheet.create({
     color: 'rgb(60, 60, 60)'
   },
 
+  paragraph: {
+    margin: 5,
+    marginLeft: 10,
+    fontSize: 14,
+    color: 'rgb(80, 80, 80)'
+  },
+
   error: {
     margin: 5,
     marginTop: 10,

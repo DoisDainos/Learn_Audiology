@@ -19,6 +19,7 @@ const dataModule = require('../utils/data');
 const getGraph = dataModule.getGraph;
 const saveGraph = dataModule.saveGraph;
 const deleteGraph = dataModule.deleteGraph;
+const clearTitles = dataModule.clearTitles;
 
 /*
  * Props:
@@ -34,13 +35,15 @@ const deleteGraph = dataModule.deleteGraph;
  * - TODO pointsNRLeft [icon: 'https://i.imgur.com/N4NDGBm.png']
  */
 class Audiogram extends React.Component {
-  static navigationOptions = {
-    title: 'New Audiogram',
-    headerTintColor: '#fff',
-    headerStyle: {
-      backgroundColor: 'rgb(94, 188, 241)',
-    }
-  }
+  static navigationOptions = ({ navigation }) => {
+    return {
+      title: navigation.state.params.title,
+      headerTintColor: '#fff',
+      headerStyle: {
+        backgroundColor: 'rgb(94, 188, 241)',
+      }
+    };
+  };
 
   state = {
     symbolsVisible: false,
@@ -49,13 +52,28 @@ class Audiogram extends React.Component {
     pointsACRight: [],
     pointsACLeft: [],
     pointsBCRight: [],
-    pointsBCLeft: []
+    pointsBCLeft: [],
+    title: 'New Audiogram'
   };
 
   constructor(props) {
     super(props);
     this.addPointsPress = this.addPointsPress.bind(this);
     this.savePress = this.savePress.bind(this);
+  }
+
+  componentWillMount() {
+    if (this.props.navigation.state.params.graph != null) {
+      let graph = this.props.navigation.state.params.graph[0];
+      console.log('POINTS', graph);
+      this.setState({
+        title: this.props.navigation.state.params.title,
+        pointsACRight: graph.points[0],
+        pointsACLeft: graph.points[1],
+        pointsBCRight: graph.points[2],
+        pointsBCLeft: graph.points[3]
+      })
+    }
   }
 
   /*
@@ -68,6 +86,7 @@ class Audiogram extends React.Component {
     points.push(this.state.pointsACLeft);
     points.push(this.state.pointsBCRight);
     points.push(this.state.pointsBCLeft);
+    saveGraph('test', points);
     console.log(points);
   }
 
