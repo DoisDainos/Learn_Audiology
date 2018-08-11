@@ -18,6 +18,7 @@ function saveGraph(title, points) {
     time: time,
     points: points
   }
+  store.push('graphTitles', title);
   store.push(title, graph);
 }
 
@@ -31,10 +32,21 @@ function getGraph(title) {
         console.log('No graphs with that title saved!');
       } else {
         console.log(graph);
-        store.delete(graph);
+        return graph;
       }
     }
   )
+}
+
+/*
+ *  Retrieve all graph titles.
+ */
+function getGraphTitles() {
+  return store.get('graphTitles')
+  .then(titles => {
+    console.log('data titles: ', titles);
+    return titles;
+  })
 }
 
 /*
@@ -47,5 +59,6 @@ function deleteGraph(title) {
 module.exports = {
   saveGraph: saveGraph,
   getGraph: getGraph,
-  deleteGraph: deleteGraph
+  deleteGraph: deleteGraph,
+  getGraphTitles: getGraphTitles
 }

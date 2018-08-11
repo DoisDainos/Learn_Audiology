@@ -8,7 +8,7 @@ class Home extends React.Component {
     return (
       <View>
         <Text style={ styles.heading }>Press a Button</Text>
-        <Button onPress={ () => navigate('Graph') } title='Audiogram'/>
+        <Button onPress={ () => navigate('AudiogramList') } title='Audiograms'/>
         <Button
           color="red"
           onPress={ () => {console.log('Working') }, () => navigate('Test') }

@@ -35,7 +35,7 @@ const deleteGraph = dataModule.deleteGraph;
  */
 class Audiogram extends React.Component {
   static navigationOptions = {
-    title: 'Audiogram',
+    title: 'New Audiogram',
     headerTintColor: '#fff',
     headerStyle: {
       backgroundColor: 'rgb(94, 188, 241)',
