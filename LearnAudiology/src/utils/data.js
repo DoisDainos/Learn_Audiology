@@ -4,26 +4,16 @@ import store from 'react-native-simple-store';
  * Save graph with provided title and generated local date-time variable.
  */
 function saveGraph(title, points, overwrite) {
-  return getGraph(title)
-  .then(title => {
-    if (title && !overwrite) {
+  getGraph(title)
+  .then(graph => {
+    if (graph && !overwrite) {
       console.log('Graph of that name already saved');
-      return 'found';
+    } else if (graph) {
+      deleteGraph(title);
+      pushGraph(title, points);
+    } else {
+      pushGraph(title, points)
     }
-    if (title) {
-      return deleteGraph(title)
-      .then(() => {
-        return pushGraph(title, points)
-      })
-      .then(() => {
-        return 'overwritten';
-      })
-    }
-    console.log('try to save');
-    return pushGraph(title, points)
-    .then(() => {
-      return 'new';
-    })
   })
 }
 
@@ -42,7 +32,18 @@ function pushGraph(title, points) {
     time: time,
     points: points
   }
-  store.push('graphTitles', title);
+  store.get('graphTitles')
+  .then(titles => {
+    if (titles) {
+      for (let i=0; i<titles.length; i++) {
+        if (titles[i] != title) {
+          store.push('graphTitles', title);
+        }
+      }
+    } else {
+      store.push('graphTitles', title);
+    }
+  })
   store.push(title, graph);
 }
 
@@ -54,7 +55,6 @@ function getGraph(title) {
   .then(graph => {
     if (!graph) {
       console.log('No graphs with that title saved!');
-      return graph;
     } else {
       console.log('Graph found ', title);
       return graph;
@@ -69,6 +69,7 @@ function getGraphTitles() {
   return store.get('graphTitles')
   .then(titles => {
     if (titles) {
+      console.log('Titles:', titles);
       return titles;
     }
     console.log('No titles found');

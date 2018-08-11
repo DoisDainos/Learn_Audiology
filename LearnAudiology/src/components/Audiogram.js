@@ -65,7 +65,6 @@ class Audiogram extends React.Component {
   componentWillMount() {
     if (this.props.navigation.state.params.graph != null) {
       let graph = this.props.navigation.state.params.graph[0];
-      console.log('POINTS', graph);
       this.setState({
         title: this.props.navigation.state.params.title,
         pointsACRight: graph.points[0],
@@ -80,14 +79,12 @@ class Audiogram extends React.Component {
    * Handle pressing save icon.
    */
   savePress() {
-    console.log('Pressed save');
     let points = [];
     points.push(this.state.pointsACRight);
     points.push(this.state.pointsACLeft);
     points.push(this.state.pointsBCRight);
     points.push(this.state.pointsBCLeft);
-    saveGraph('test', points, false);
-    console.log(points);
+    saveGraph('test', points, true);
   }
 
   /*

@@ -102,6 +102,12 @@ class AudiogramList extends React.Component {
             raised
           />
           {
+            this.state.titles.length === 0 &&
+            <Text style={ styles.heading }>
+              No audiograms saved.
+            </Text>
+          }
+          {
             this.state.titles != null && this.state.graphs != null &&
             this.state.graphs.map((graph, index) => (
               <View
