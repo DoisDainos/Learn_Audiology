@@ -22,6 +22,8 @@ class AddPoints extends React.Component {
     submitTextColor: '#fff',
     earErr: '',
     conErr: '',
+    timeout1: '',
+    timeout2: ''
   };
 
   constructor(props) {
@@ -33,6 +35,14 @@ class AddPoints extends React.Component {
     this.decreaseFreq = this.decreaseFreq.bind(this);
     this.increaseHear = this.increaseHear.bind(this);
     this.decreaseHear = this.decreaseHear.bind(this);
+  }
+
+  /*
+   * Clear any pending pending timeouts when component is closed.
+   */
+  componentWillUnmount() {
+    clearTimeout(this.state.timeout1);
+    clearTimeout(this.state.timeout2);
   }
 
   /*
@@ -53,7 +63,7 @@ class AddPoints extends React.Component {
       if (missing) {
         return;
       }
-      let that = this;
+      // Button response part 1: spinning wheel
       this.setState({ loading: true, submitText: '' });
       let point = {
         Hz: this.state.frequency,
@@ -72,16 +82,22 @@ class AddPoints extends React.Component {
           navParams.addPointBCLeft(point);
         }
       }
-      setTimeout( function() {
-        that.setState({
-          loading: false,
-          submitText: 'POINT ADDED',
-          submitTextColor: 'rgb(99, 255, 138)'
-        })
-      }, 500 );
-      setTimeout( function() {
-        that.setState({ submitText: 'SUBMIT', submitTextColor: '#fff' })
-      }, 1500 );
+      let that = this;
+      // Button response part 2: POINT ADDED text
+      let timer1 =
+        setTimeout( function() {
+          that.setState({
+            loading: false,
+            submitText: 'POINT ADDED',
+            submitTextColor: 'rgb(99, 255, 138)'
+          })
+        }, 500 );
+      // Button response part 3: reset
+      let timer2 =
+        setTimeout( function() {
+          that.setState({ submitText: 'SUBMIT', submitTextColor: '#fff' })
+        }, 1500 );
+      that.setState({ timeout1: timer1, timeout2: timer2 });
     }
   }
 

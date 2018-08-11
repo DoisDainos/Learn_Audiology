@@ -14,6 +14,12 @@ import Points from './audiogram_parts/Points';
 import SymbolsModal from './audiogram_parts/SymbolsModal';
 import PointsModal from './audiogram_parts/PointsModal';
 
+// Define modules for data functions
+const dataModule = require('../utils/data');
+const getGraph = dataModule.getGraph;
+const saveGraph = dataModule.saveGraph;
+const deleteGraph = dataModule.deleteGraph;
+
 /*
  * Props:
  * - pointsACRight
@@ -49,13 +55,27 @@ class Audiogram extends React.Component {
   constructor(props) {
     super(props);
     this.addPointsPress = this.addPointsPress.bind(this);
+    this.savePress = this.savePress.bind(this);
+  }
+
+  /*
+   * Handle pressing save icon.
+   */
+  savePress() {
+    console.log('Pressed save');
+    let points = [];
+    points.push(this.state.pointsACRight);
+    points.push(this.state.pointsACLeft);
+    points.push(this.state.pointsBCRight);
+    points.push(this.state.pointsBCLeft);
+    console.log(points);
   }
 
   /*
    * Handle pressing of add points button.
    */
   addPointsPress() {
-    this.props.navigation.push(
+    this.props.navigation.navigate(
       'AddPoints',
       {
         addPointACRight: this.addPointACRight.bind(this),
@@ -332,6 +352,23 @@ class Audiogram extends React.Component {
 
     return (
       <ScrollView>
+        <View style={{
+          alignItems: 'flex-start',
+          justifyContent: 'flex-start',
+          position: 'absolute',
+          marginLeft: 20
+        }}>
+          <Icon
+            name="save"
+            reverse
+            color="rgb(94, 188, 241)"
+            reverseColor="#fff"
+            size={ 20 }
+            raised
+            component={ TouchableOpacity }
+            onPress={ this.savePress }
+          />
+        </View>
         <View style={{
           flexDirection: 'row',
           alignItems: 'flex-end',

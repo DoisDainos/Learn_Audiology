@@ -3,7 +3,7 @@ import store from 'react-native-simple-store';
 /*
  * Save graph with provided title and generated local date-time variable.
  */
-function saveGraph(title, pointArray) {
+function saveGraph(title, points) {
   // DAYOFWEEK MONTH [BLANK] DAY TIME YEAR
   var timeComplete = new Date().toLocaleString().split(' ');
   var index = 2;
@@ -16,9 +16,9 @@ function saveGraph(title, pointArray) {
   var graph = {
     date: date,
     time: time,
-    points: pointArray
+    points: points
   }
-  store.push(title, graph)
+  store.push(title, graph);
 }
 
 /*

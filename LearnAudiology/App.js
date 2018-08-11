@@ -16,7 +16,7 @@ import Test from './src/components/TestPage';
 import Graph from './src/components/Audiogram';
 import AddPoints from './src/components/AddPoints';
 
-/** Stack based navigater**/
+/** Stack based navigator**/
 const LearnAudiology = createStackNavigator({
   //don't forget commas
   Home: { screen: Home },
