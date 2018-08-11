@@ -16,7 +16,12 @@ class AddPoints extends React.Component {
     selectedIndexEar: 2,
     selectedIndexCon: 2,
     frequency: 125,
-    hearingLevel: 0
+    hearingLevel: 0,
+    loading: false,
+    submitText: 'SUBMIT',
+    submitTextColor: '#fff',
+    earErr: '',
+    conErr: '',
   };
 
   constructor(props) {
@@ -34,28 +39,49 @@ class AddPoints extends React.Component {
    * Add point to suitable array.
    */
   addPoint() {
-    let navParams = this.props.navigation.state.params;
-    if (this.state.selectedIndexEar === 2 ||
-      this.state.selectedIndexCon === 2) {
-      console.log('Choose an ear and conduction');
-      return;
-    }
-    let point = {
-      Hz: this.state.frequency,
-      dB: this.state.hearingLevel
-    };
-    if (this.state.selectedIndexEar === 0) { // Right ear
-      if (this.state.selectedIndexCon === 0) { // Right ear -> air conduction
-        navParams.addPointACRight(point);
-      } else { // Right ear -> bone conduction
-        navParams.addPointBCRight(point);
+    if (!this.state.loading) {
+      let navParams = this.props.navigation.state.params;
+      let missing = false;
+      if (this.state.selectedIndexEar === 2) {
+        this.setState({ earErr: 'Please select a test ear' });
+        missing = true;
       }
-    } else { // Left ear
-      if (this.state.selectedIndexCon === 0) { // Left ear -> air conduction
-        navParams.addPointACLeft(point);
-      } else { // Left ear -> bone conduction
-        navParams.addPointBCLeft(point);
+      if (this.state.selectedIndexCon === 2) {
+        this.setState({ conErr: 'Please select a conduction type' })
+        missing = true;
       }
+      if (missing) {
+        return;
+      }
+      let that = this;
+      this.setState({ loading: true, submitText: '' });
+      let point = {
+        Hz: this.state.frequency,
+        dB: this.state.hearingLevel
+      };
+      if (this.state.selectedIndexEar === 0) { // Right ear
+        if (this.state.selectedIndexCon === 0) { // Right ear -> air conduction
+          navParams.addPointACRight(point);
+        } else { // Right ear -> bone conduction
+          navParams.addPointBCRight(point);
+        }
+      } else { // Left ear
+        if (this.state.selectedIndexCon === 0) { // Left ear -> air conduction
+          navParams.addPointACLeft(point);
+        } else { // Left ear -> bone conduction
+          navParams.addPointBCLeft(point);
+        }
+      }
+      setTimeout( function() {
+        that.setState({
+          loading: false,
+          submitText: 'POINT ADDED',
+          submitTextColor: 'rgb(99, 255, 138)'
+        })
+      }, 500 );
+      setTimeout( function() {
+        that.setState({ submitText: 'SUBMIT', submitTextColor: '#fff' })
+      }, 1500 );
     }
   }
 
@@ -64,7 +90,8 @@ class AddPoints extends React.Component {
    */
   updateIndexEar(selectedIndexEar) {
     this.setState({
-      selectedIndexEar
+      selectedIndexEar,
+      earErr: ''
     });
   }
 
@@ -73,7 +100,8 @@ class AddPoints extends React.Component {
    */
   updateIndexCon(selectedIndexCon) {
     this.setState({
-      selectedIndexCon
+      selectedIndexCon,
+      conErr: ''
     });
   }
 
@@ -134,7 +162,10 @@ class AddPoints extends React.Component {
 
     return (
       <ScrollView>
-        <Text style={ styles.heading }>Test ear</Text>
+        <View style={{ flexDirection: 'row' }}>
+          <Text style={ styles.heading }>Test ear </Text>
+          <Text style={ styles.error }>{ this.state.earErr }</Text>
+        </View>
         <ButtonGroup
           onPress={ this.updateIndexEar }
           selectedIndex={ selectedIndexEar }
@@ -143,7 +174,10 @@ class AddPoints extends React.Component {
           selectedTextStyle={{ fontWeight: 'bold' }}
           textStyle={{ fontSize: 23 }}
         />
-        <Text style={ styles.heading }>Conduction</Text>
+        <View style={{ flexDirection: 'row' }}>
+          <Text style={ styles.heading }>Conduction </Text>
+          <Text style={ styles.error }>{ this.state.conErr }</Text>
+        </View>
         <ButtonGroup
           onPress={ this.updateIndexCon }
           selectedIndex={ selectedIndexCon }
@@ -266,8 +300,11 @@ class AddPoints extends React.Component {
         </View>
         <View style={{ height: 130, marginTop: 15 }}>
           <Button
+            buttonStyle={{ height: 50 }}
+            textStyle={{ color: this.state.submitTextColor }}
+            loading={ this.state.loading }
             raised
-            title="SUBMIT"
+            title={ this.state.submitText }
             backgroundColor="rgb(94, 188, 241)"
             onPress={ this.addPoint }
           />
