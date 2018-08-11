@@ -2,8 +2,8 @@ import store from 'react-native-simple-store';
 
 /*
  * Save graph with provided title and generated local date-time variable.
- *
-function checkGraph(title, points, overwrite) {
+ */
+function saveGraph(title, points, overwrite) {
   return getGraph(title)
   .then(title => {
     if (title && !overwrite) {
@@ -26,8 +26,8 @@ function checkGraph(title, points, overwrite) {
     })
   })
 }
-*/
-function saveGraph(title, points) {
+
+function pushGraph(title, points) {
   // DAYOFWEEK MONTH [BLANK] DAY TIME YEAR
   var timeComplete = new Date().toLocaleString().split(' ');
   var index = 2;

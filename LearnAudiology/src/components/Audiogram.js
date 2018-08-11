@@ -86,7 +86,7 @@ class Audiogram extends React.Component {
     points.push(this.state.pointsACLeft);
     points.push(this.state.pointsBCRight);
     points.push(this.state.pointsBCLeft);
-    saveGraph('test', points);
+    saveGraph('test', points, false);
     console.log(points);
   }
 
