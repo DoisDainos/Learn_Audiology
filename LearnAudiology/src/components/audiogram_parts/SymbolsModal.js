@@ -1,6 +1,7 @@
 import React from 'react';
 import { Text, View, Modal, Image, TouchableOpacity } from 'react-native';
 import { Badge, Icon } from 'react-native-elements';
+import { Header } from 'react-navigation';
 
 const Symbols = (props) => {
   return (
@@ -19,7 +20,7 @@ const Symbols = (props) => {
             flex: 1,
             alignItems: 'center',
             backgroundColor: 'rgba(0,0,0,0.3)',
-            marginTop: '15.5%'
+            marginTop: Header.HEIGHT
           }}
           onPress={() => {
             props.parent.setSymbolsVisible(!props.visible);
