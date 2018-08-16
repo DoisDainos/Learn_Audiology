@@ -95,12 +95,14 @@ function getGraphTitles() {
  * Delete graph with the given title.
  */
 function deleteGraph(title) {
+  console.log('Attempting to delete graph with title:', title);
   return store.get(title)
   .then(found => {
     if (found) {
       console.log('Deleting graph with title', title)
-      store.delete(title)
+      return store.delete(title)
       .then(() => {
+        console.log('Deleted graph');
         return true;
       })
     } else {
@@ -111,22 +113,29 @@ function deleteGraph(title) {
 }
 
 function clearTitles() {
-  store.delete('graphTitles');
+  return store.delete('graphTitles');
 }
 
 function deleteTitle(title) {
+  console.log('Preparing to delete title:', title);
   return store.get('graphTitles')
   .then(titles => {
+    console.log('titles to check', titles);
     if (titles) {
-      let newTitles = [];
-      for (let i=0; i<titles.length; i++) {
-        if (titles[i] !== title) {
-          newTitles.push(titles[i]);
+      return store.delete('graphTitles')
+      .then(() => {
+        console.log('Searching', titles);
+        for (let i=0; i<titles.length; i++) {
+          console.log('Comparing', titles[i], title);
+          if (titles[i] !== title) {
+            return store.push('graphTitles', titles[i])
+          }
         }
-      }
-      store.push('graphTitles', newTitles);
+        return true;
+      })
       return true;
     } else {
+      console.log('No graph found when attempting to delete')
       return false;
     }
   })

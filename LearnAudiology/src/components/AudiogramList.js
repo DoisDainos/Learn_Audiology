@@ -11,6 +11,7 @@ const getGraph = dataModule.getGraph;
 const deleteGraph = dataModule.deleteGraph;
 const getGraphTitles = dataModule.getGraphTitles;
 const clearTitles = dataModule.clearTitles;
+const deleteTitle = dataModule.deleteTitle;
 
 class AudiogramList extends React.Component {
   static navigationOptions = {
@@ -74,12 +75,12 @@ class AudiogramList extends React.Component {
       titles: this.state.titles.filter((_, i) => i !== index1),
       graphs: this.state.graphs.filter((_, i) => i !== index2)
     })
-    clearTitles();
     let that = this;
     return deleteGraph(title)
     .then(result => {
       if (!result) {
-        return result;
+        console.log('Failed to delete graph');
+        return;
       }
       return deleteTitle(title)
       .then(result => {
