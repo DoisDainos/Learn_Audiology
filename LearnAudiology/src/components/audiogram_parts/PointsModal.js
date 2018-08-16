@@ -79,6 +79,7 @@ class PointsModal extends React.Component {
                             icon={{name: 'timeline'}}
                             title="EDIT"
                             backgroundColor="rgb(94, 188, 241)"
+                            onPress={ () => this.props.parent.editPress(point) }
                           />
                         </View>
                         {this.props.points.length > 1 &&

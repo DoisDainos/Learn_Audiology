@@ -62,6 +62,7 @@ class Audiogram extends React.Component {
     super(props);
     this.addPointsPress = this.addPointsPress.bind(this);
     this.savePress = this.savePress.bind(this);
+    this.editPress = this.editPress.bind(this);
   }
 
   /*
@@ -96,6 +97,8 @@ class Audiogram extends React.Component {
     this.props.navigation.navigate(
       'AddPoints',
       {
+        title: 'Add points',
+        editing: false,
         addPointACRight: this.addPointACRight.bind(this),
         addPointACLeft: this.addPointACLeft.bind(this),
         addPointBCRight: this.addPointBCRight.bind(this),
@@ -219,6 +222,7 @@ class Audiogram extends React.Component {
    * - masked: is point masked boolean value
    */
   removePoint(frequency, conduction, ear, masked) {
+    console.log(frequency, conduction, ear, masked)
     if (conduction === 'air' && ear === 'left' && masked === false) {
       for (var i=0; i<this.state.pointsACRight.length; i++) {
         if (this.state.pointsACRight[i].Hz === frequency) {
@@ -226,7 +230,9 @@ class Audiogram extends React.Component {
             this.state.pointsACRight[i]
           );
           if (index > -1) {
-            this.state.pointsACRight.splice(index, 1);
+            this.setState({
+              pointsACRight: this.state.pointsACRight.splice(index, 1)
+            })
             return;
           }
         }
@@ -351,12 +357,33 @@ class Audiogram extends React.Component {
     });
   }
 
+  editPress(point) {
+    this.setState({
+      pointsVisible: false
+    })
+    this.props.navigation.navigate(
+      'AddPoints',
+      {
+        title: 'Edit point',
+        editing: true,
+        parent: this,
+        point: point,
+        addPointACRight: this.addPointACRight.bind(this),
+        addPointACLeft: this.addPointACLeft.bind(this),
+        addPointBCRight: this.addPointBCRight.bind(this),
+        addPointBCLeft: this.addPointBCLeft.bind(this)
+      }
+    );
+  }
+
   render() {
     // Add necessary information to each air conduction, right ear point
     for (var i=0; i<this.state.pointsACRight.length; i++) {
       this.state.pointsACRight[i]['colour'] = 'rgb(255, 6, 0)';
       this.state.pointsACRight[i]['image'] =
-        'https://i.imgur.com/BtWXB20.png'
+        'https://i.imgur.com/BtWXB20.png';
+      this.state.pointsACRight[i]['conduction'] = 'air';
+      this.state.pointsACRight[i]['ear'] = 'right';
       this.state.pointsACRight[i]['masked'] = false;
     }
     // Sort array of points
@@ -367,6 +394,8 @@ class Audiogram extends React.Component {
       this.state.pointsACLeft[i]['colour'] = 'rgb(0, 26, 255)';
       this.state.pointsACLeft[i]['image'] =
         'https://i.imgur.com/VqJdazw.png';
+      this.state.pointsACLeft[i]['conduction'] = 'air';
+      this.state.pointsACLeft[i]['ear'] = 'left';
       this.state.pointsACLeft[i]['masked'] = false;
     }
     // Sort array of points
@@ -376,7 +405,9 @@ class Audiogram extends React.Component {
     for (var i=0; i<this.state.pointsBCRight.length; i++) {
       this.state.pointsBCRight[i]['colour'] = 'rgb(255, 6, 0)';
       this.state.pointsBCRight[i]['image'] =
-        'https://i.imgur.com/kv5twnR.png'
+        'https://i.imgur.com/kv5twnR.png';
+      this.state.pointsBCRight[i]['conduction'] = 'bone';
+      this.state.pointsBCRight[i]['ear'] = 'right';
       this.state.pointsBCRight[i]['masked'] = false;
     }
     // Sort array of points
@@ -386,7 +417,9 @@ class Audiogram extends React.Component {
     for (var i=0; i<this.state.pointsBCLeft.length; i++) {
       this.state.pointsBCLeft[i]['colour'] = 'rgb(0, 26, 255)';
       this.state.pointsBCLeft[i]['image'] =
-        'https://i.imgur.com/2q2Nglb.png'
+        'https://i.imgur.com/2q2Nglb.png';
+      this.state.pointsBCLeft[i]['conduction'] = 'bone';
+      this.state.pointsBCLeft[i]['ear'] = 'left';
       this.state.pointsBCLeft[i]['masked'] = false;
     }
     // Sort array of points

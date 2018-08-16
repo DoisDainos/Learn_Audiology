@@ -4,12 +4,14 @@ import { ButtonGroup, Button, Icon } from 'react-native-elements';
 import styles from '../styles/TextStyles';
 
 class AddPoints extends React.Component {
-  static navigationOptions = {
-    title: 'Add points',
-    headerTintColor: '#fff',
-    headerStyle: {
-      backgroundColor: 'rgb(94, 188, 241)',
-    }
+  static navigationOptions = ({ navigation }) => {
+    return {
+      title: navigation.state.params.title,
+      headerTintColor: '#fff',
+      headerStyle: {
+        backgroundColor: 'rgb(94, 188, 241)'
+      }
+    };
   }
 
   state = {
@@ -37,6 +39,34 @@ class AddPoints extends React.Component {
     this.decreaseHear = this.decreaseHear.bind(this);
   }
 
+  componentWillMount() {
+    let navParams = this.props.navigation.state.params;
+    if (navParams.editing) {
+      if (navParams.point.ear === 'right') {
+        this.setState({
+          selectedIndexEar: 0
+        })
+      } else {
+        this.setState({
+          selectedIndexEar: 1
+        })
+      }
+    }
+    if (navParams.point.conduction === 'air') {
+      this.setState({
+        selectedIndexCon: 0
+      })
+    } else {
+      this.setState({
+        selectedIndexEar: 1
+      })
+    }
+    this.setState({
+      frequency: navParams.point.Hz,
+      hearingLevel: navParams.point.dB
+    })
+  }
+
   /*
    * Clear any pending pending timeouts when component is closed.
    */
@@ -51,6 +81,14 @@ class AddPoints extends React.Component {
   addPoint() {
     if (!this.state.loading) {
       let navParams = this.props.navigation.state.params;
+      if (navParams.editing) {
+        navParams.parent.removePoint(
+          navParams.point.Hz,
+          navParams.point.conduction,
+          navParams.point.ear,
+          navParams.point.masked
+        );
+      }
       let missing = false;
       if (this.state.selectedIndexEar === 2) {
         this.setState({ earErr: 'Please select a test ear' });
@@ -91,6 +129,9 @@ class AddPoints extends React.Component {
             submitText: 'POINT ADDED',
             submitTextColor: 'rgb(99, 255, 138)'
           })
+          if (navParams.editing) {
+            that.props.navigation.pop(1);
+          }
         }, 500 );
       // Button response part 3: reset
       let timer2 =
