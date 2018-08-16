@@ -223,18 +223,16 @@ class Audiogram extends React.Component {
    */
   removePoint(frequency, conduction, ear, masked) {
     console.log(frequency, conduction, ear, masked)
-    if (conduction === 'air' && ear === 'left' && masked === false) {
+    if (conduction === 'air' && ear === 'right' && masked === false) {
       for (var i=0; i<this.state.pointsACRight.length; i++) {
         if (this.state.pointsACRight[i].Hz === frequency) {
           var index = this.state.pointsACRight.indexOf(
             this.state.pointsACRight[i]
           );
-          if (index > -1) {
-            this.setState({
-              pointsACRight: this.state.pointsACRight.splice(index, 1)
-            })
-            return;
-          }
+          this.setState({
+            pointsACRight: this.state.pointsACRight.filter((_, j) => j !== index)
+          })
+          return;
         }
       }
     }

@@ -9,18 +9,19 @@ import {
 import { Badge, Icon, Button, Divider } from 'react-native-elements';
 
 class PointsModal extends React.Component {
-  state = {
-    points: []
-  }
-
   constructor(props) {
     super(props);
+    this.handleRemovePress = this.handleRemovePress.bind(this);
   }
 
-  setPoints(points) {
-    this.setState({
-      points: points
-    })
+  handleRemovePress(point) {
+    this.props.parent.removePoint(
+      point.Hz,
+      point.conduction,
+      point.ear,
+      point.masked
+    );
+    this.props.parent.setPointsVisible(!this.props.parent.state.pointsVisible);
   }
 
   render() {
@@ -67,6 +68,12 @@ class PointsModal extends React.Component {
                           flexDirection: 'row',
                           padding: 5
                         }}>
+                          <Icon
+                            component={ TouchableOpacity }
+                            color="rgb(80, 80, 80)"
+                            name="delete"
+                            onPress={ () => this.handleRemovePress(point) }
+                          />
                           <Image
                             style={{ width: 20, height: 20, alignSelf: 'center' }}
                             source={{ uri: point.image }}

@@ -39,6 +39,9 @@ class AddPoints extends React.Component {
     this.decreaseHear = this.decreaseHear.bind(this);
   }
 
+  /*
+   * Before loading component, if editing point, use point options.
+   */
   componentWillMount() {
     let navParams = this.props.navigation.state.params;
     if (navParams.editing) {
@@ -51,20 +54,20 @@ class AddPoints extends React.Component {
           selectedIndexEar: 1
         })
       }
-    }
-    if (navParams.point.conduction === 'air') {
+      if (navParams.point.conduction === 'air') {
+        this.setState({
+          selectedIndexCon: 0
+        })
+      } else {
+        this.setState({
+          selectedIndexEar: 1
+        })
+      }
       this.setState({
-        selectedIndexCon: 0
-      })
-    } else {
-      this.setState({
-        selectedIndexEar: 1
+        frequency: navParams.point.Hz,
+        hearingLevel: navParams.point.dB
       })
     }
-    this.setState({
-      frequency: navParams.point.Hz,
-      hearingLevel: navParams.point.dB
-    })
   }
 
   /*
