@@ -21,9 +21,11 @@ const getGraph = dataModule.getGraph;
 const saveGraph = dataModule.saveGraph;
 const deleteGraph = dataModule.deleteGraph;
 const clearTitles = dataModule.clearTitles;
+const deleteTitle = dataModule.deleteTitle;
 
 /*
  * Props:
+ * - title: appears at top of screen
  * - pointsACRight
  * - pointsACLeft
  * - pointsBCRight
@@ -222,7 +224,6 @@ class Audiogram extends React.Component {
    * - masked: is point masked boolean value
    */
   removePoint(frequency, conduction, ear, masked) {
-    console.log(frequency, conduction, ear, masked)
     if (conduction === 'air' && ear === 'right' && masked === false) {
       for (var i=0; i<this.state.pointsACRight.length; i++) {
         if (this.state.pointsACRight[i].Hz === frequency) {
@@ -242,10 +243,10 @@ class Audiogram extends React.Component {
           var index = this.state.pointsACLeft.indexOf(
             this.state.pointsACLeft[i]
           );
-          if (index > -1) {
-            this.state.pointsACLeft.splice(index, 1);
-            return;
-          }
+          this.setState({
+            pointsACLeft: this.state.pointsACLeft.filter((_, j) => j !== index)
+          })
+          return;
         }
       }
     }
@@ -255,10 +256,10 @@ class Audiogram extends React.Component {
           var index = this.state.pointsBCRight.indexOf(
             this.state.pointsBCRight[i]
           );
-          if (index > -1) {
-            this.state.pointsBCRight.splice(index, 1);
-            return;
-          }
+          this.setState({
+            pointsBCRight: this.state.pointsBCRight.filter((_, j) => j !== index)
+          })
+          return;
         }
       }
     }
@@ -268,10 +269,10 @@ class Audiogram extends React.Component {
           var index = this.state.pointsBCLeft.indexOf(
             this.state.pointsBCLeft[i]
           );
-          if (index > -1) {
-            this.state.pointsBCLeft.splice(index, 1);
-            return;
-          }
+          this.setState({
+            pointsBCLeft: this.state.pointsBCLeft.filter((_, j) => j !== index)
+          })
+          return;
         }
       }
     }
@@ -280,7 +281,7 @@ class Audiogram extends React.Component {
   /*
    * Replace a point given its description, provide new hearing level.
    * Params:
-   * - frequncy: integer value for Hz
+   * - frequency: integer value for Hz
    * - conduction: 'air' or 'bone'
    * - ear: 'left' or 'right'
    * - masked: is point masked boolean value

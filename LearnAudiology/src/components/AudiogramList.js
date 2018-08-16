@@ -30,6 +30,7 @@ class AudiogramList extends React.Component {
     super(props);
     this.newGraphPress = this.newGraphPress.bind(this);
     this.chosenGraphPress = this.chosenGraphPress.bind(this);
+    this.handleDeletePress = this.handleDeletePress.bind(this);
   }
 
   /*
@@ -60,6 +61,30 @@ class AudiogramList extends React.Component {
           })
         })
       }
+    })
+  }
+
+  /*
+   * Handle pressing delete button on a graph preview.
+   */
+  handleDeletePress(title, graph) {
+    let index1 = this.state.titles.indexOf(title);
+    let index2 = this.state.graphs.indexOf(graph);
+    this.setState({
+      titles: this.state.titles.filter((_, i) => i !== index1),
+      graphs: this.state.graphs.filter((_, i) => i !== index2)
+    })
+    clearTitles();
+    let that = this;
+    return deleteGraph(title)
+    .then(result => {
+      if (!result) {
+        return result;
+      }
+      return deleteTitle(title)
+      .then(result => {
+        return result;
+      })
     })
   }
 
@@ -118,7 +143,12 @@ class AudiogramList extends React.Component {
                         Title: { this.state.titles[index] }
                       </Text>
                     </View>
-                    <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+                    <View
+                      style={{
+                        justifyContent: 'center',
+                        alignItems: 'center'
+                      }}
+                    >
                       <AudiogramPreview
                         graph={ this.state.graphs[index] }
                       />
@@ -143,6 +173,9 @@ class AudiogramList extends React.Component {
                       reverseColor="rgb(80, 80, 80)"
                       color="#fff"
                       name="delete"
+                      onPress={ () =>
+                        this.handleDeletePress(this.state.titles[index], graph)
+                      }
                     />
                     <Divider style={{ marginTop: 15 }} />
                   </View>

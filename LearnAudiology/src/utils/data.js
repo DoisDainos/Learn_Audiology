@@ -80,11 +80,41 @@ function getGraphTitles() {
  * Delete graph with the given title.
  */
 function deleteGraph(title) {
-  store.delete(title);
+  return store.get(title)
+  .then(found => {
+    if (found) {
+      console.log('Deleting graph with title', title)
+      store.delete(title)
+      .then(() => {
+        return true;
+      })
+    } else {
+      console.log('Unable to delete graph, could not find.')
+      return false;
+    }
+  })
 }
 
 function clearTitles() {
   store.delete('graphTitles');
+}
+
+function deleteTitle(title) {
+  return store.get('graphTitles')
+  .then(titles => {
+    if (titles) {
+      let newTitles = [];
+      for (let i=0; i<titles.length; i++) {
+        if (titles[i] !== title) {
+          newTitles.push(titles[i]);
+        }
+      }
+      store.push('graphTitles', newTitles);
+      return true;
+    } else {
+      return false;
+    }
+  })
 }
 
 module.exports = {
@@ -92,5 +122,6 @@ module.exports = {
   getGraph: getGraph,
   deleteGraph: deleteGraph,
   getGraphTitles: getGraphTitles,
-  clearTitles: clearTitles
+  clearTitles: clearTitles,
+  deleteTitle: deleteTitle
 }
