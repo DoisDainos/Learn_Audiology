@@ -7,7 +7,6 @@ import {
   TouchableOpacity
 } from 'react-native';
 import { Badge, Icon, Button, Divider } from 'react-native-elements';
-import { Header } from 'react-navigation';
 
 class PointsModal extends React.Component {
   state = {
@@ -26,14 +25,14 @@ class PointsModal extends React.Component {
 
   render() {
     var index = 0;
-    return(
+    return (
       <View>
         <Modal
           animationType="fade"
           transparent={ true }
           visible={ this.props.visible }
-          onRequestClose={() => {
-            alert('Modal has been closed.');
+          onRequestClose={ () => {
+            this.props.parent.setPointsVisible(!this.props.visible);
           }}
         >
           <TouchableOpacity
@@ -41,8 +40,7 @@ class PointsModal extends React.Component {
               justifyContent: 'center',
               flex: 1,
               alignItems: 'center',
-              backgroundColor: 'rgba(0,0,0,0.3)',
-              marginTop: Header.HEIGHT
+              backgroundColor: 'rgba(0,0,0,0.3)'
             }}
             onPress={() => {
               this.props.parent.setPointsVisible(!this.props.visible);

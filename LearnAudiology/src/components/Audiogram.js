@@ -13,6 +13,7 @@ import Grid from './audiogram_parts/Grid';
 import Points from './audiogram_parts/Points';
 import SymbolsModal from './audiogram_parts/SymbolsModal';
 import PointsModal from './audiogram_parts/PointsModal';
+import SaveFormModal from './audiogram_parts/SaveFormModal';
 
 // Define modules for data functions
 const dataModule = require('../utils/data');
@@ -48,6 +49,7 @@ class Audiogram extends React.Component {
   state = {
     symbolsVisible: false,
     pointsVisible: false,
+    saveFormVisible: false,
     pointsToModal: [],
     pointsACRight: [],
     pointsACLeft: [],
@@ -62,6 +64,9 @@ class Audiogram extends React.Component {
     this.savePress = this.savePress.bind(this);
   }
 
+  /*
+   * Before loading component, takes any points passed as props in navigation.
+   */
   componentWillMount() {
     if (this.props.navigation.state.params.graph != null) {
       let graph = this.props.navigation.state.params.graph[0];
@@ -79,12 +84,9 @@ class Audiogram extends React.Component {
    * Handle pressing save icon.
    */
   savePress() {
-    let points = [];
-    points.push(this.state.pointsACRight);
-    points.push(this.state.pointsACLeft);
-    points.push(this.state.pointsBCRight);
-    points.push(this.state.pointsBCLeft);
-    saveGraph('test', points, true);
+    this.setState({
+      saveFormVisible: true
+    })
   }
 
   /*
@@ -136,6 +138,13 @@ class Audiogram extends React.Component {
     this.setState({
       pointsBCLeft: this.state.pointsBCLeft.concat([point])
     });
+  }
+
+  /*
+   * Set save form modal visibility (true/false).
+   */
+  setSaveFormVisible(visible) {
+    this.setState({ saveFormVisible: visible });
   }
 
   /*
@@ -292,6 +301,9 @@ class Audiogram extends React.Component {
     return points;
   }
 
+  /*
+   * Display the modal showing points at a selected frequency.
+   */
   displayPointsModal(points) {
     this.setState({
       pointsVisible: !this.state.pointsVisible,
@@ -343,12 +355,7 @@ class Audiogram extends React.Component {
     // Reference values for vertical gridlines (frequencies)
     const yGridLines = [ '5%', '14.28%', '28.13%', '41.98%', '55.83%',
       '69.68%', '83.53%', '97.38%' ];
-    // Reference values for horizontal gridlines (hearing level)
-    const xGridLines = [ 17, 31.5, 46, 60.5, 75, 89.5, 104, 118.5, 133, 147.5,
-      162, 176.5, 191, 205.5, 220, 234.5, 249, 263.5, 278, 292.5, 307, 321.5,
-      336, 350.5, 365, 379.5, 394, 408.5, 423, 437.5, 452, 466.5, 481 ];
 
-    // Major values for hearing levels, used for grid lines
     const dBsMain = [ -10, 0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110,
       120 ];
     /* Values for hearing levels used for labels, fixes issue where negative
@@ -357,6 +364,18 @@ class Audiogram extends React.Component {
       ' 70', ' 80', ' 90', '100', '110', '120']
     // Minor values for hearing levels, used for grid lines
     const dBsMinor = [ -5, 5, 15, 25, 35, 45, 55, 65, 75, 85, 95, 105, 115 ];
+
+    // Create reference values for x grid lines
+    let n = 4.35;
+    var toPush = '';
+    toPush += n.toString() + '%';
+    var xGridLines = [];
+    xGridLines.push(toPush);
+    for (let i=0; i<dBsMinor.length + dBsMain.length; i++) {
+      n += 3.617;
+      toPush = n.toString() + '%';
+      xGridLines.push(toPush);
+    }
 
     // Frequencies for points
     const frequencies = [ 125, 250, 500, 1000, 2000, 4000, 8000 ];
@@ -408,6 +427,10 @@ class Audiogram extends React.Component {
             <Text style={{ color: 'rgb(94, 188, 241)' }}> SYMBOLS</Text>
           </Badge>
         </View>
+        <SaveFormModal
+          visible={ this.state.saveFormVisible }
+          parent={ this }
+        />
         <SymbolsModal visible={ this.state.symbolsVisible } parent={ this } />
         <PointsModal
           visible={ this.state.pointsVisible }
@@ -437,6 +460,7 @@ class Audiogram extends React.Component {
                 dBsMinor={ dBsMinor }
                 frequencies={ frequenciesGrid }
                 parent={ this }
+                isPreview={ false }
               />
               {this.state.pointsACRight.length > 0 &&
                 <Points

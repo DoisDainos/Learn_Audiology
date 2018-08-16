@@ -8,10 +8,23 @@ const Points = (props) => {
   // Define coordinates for points on graph
   const yPoints = [ '-1.2%', '10.7%', '24.5%', '38.4%', '52.2%', '66.1%',
     '79.9%', '93.8%' ]
-  const xPoints = [ 2.4, 16.8, 31.2, 45.6, 60, 74.4, 88.8, 103.2, 117.8, 132.4,
+  /*const xPoints = [ 2.4, 16.8, 31.2, 45.6, 60, 74.4, 88.8, 103.2, 117.8, 132.4,
     146.8, 161.2, 175.7, 190.4, 204.8, 219.3, 233.8, 248.6, 262.8, 277.4,
     291.8, 306.4, 321, 335.5, 350.1, 364.5, 378.5, 391.6, 406, 420.4, 434.8,
-    449.2, 463.6 ];
+    449.2, 463.6 ];*/
+
+    // Create x coordinates for points
+    let n = 0.7;
+    var toPush = '';
+    toPush += n.toString() + '%';
+    var xPoints = [];
+    xPoints.push(toPush);
+    for (let i=0; i<props.xGridLines.length; i++) {
+      n += 3.617;
+      toPush = n.toString() + '%';
+      xPoints.push(toPush);
+    }
+
 
   // Map frequency values to graph index
   const freqMap = {

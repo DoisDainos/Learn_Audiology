@@ -33,6 +33,7 @@ class Grid extends React.Component {
       <G>
         {
           // Horizontal grid lines for major dBs
+          this.props.dBsMain != null &&
           this.props.dBsMain.map(() => (
             <Line
               key={ xIndex1 }
@@ -46,6 +47,7 @@ class Grid extends React.Component {
         }
         {
           // Horizontal grid lines for minor dBs
+          this.props.dBsMinor != null &&
           this.props.dBsMinor.map(() => (
             <Line
               key={ xIndex2 }
@@ -59,6 +61,7 @@ class Grid extends React.Component {
         }
         {
           // Vertical grid lines for frequencies, can press them
+          this.props.frequencies != null &&
           this.props.frequencies.map((freq, index) => ([
             <Line
               key={ yIndex }

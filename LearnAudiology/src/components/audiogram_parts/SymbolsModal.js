@@ -1,7 +1,6 @@
 import React from 'react';
 import { Text, View, Modal, Image, TouchableOpacity } from 'react-native';
 import { Badge, Icon } from 'react-native-elements';
-import { Header } from 'react-navigation';
 
 const Symbols = (props) => {
   return (
@@ -10,8 +9,8 @@ const Symbols = (props) => {
         animationType="fade"
         transparent={ true }
         visible={ props.visible }
-        onRequestClose={() => {
-          alert('Modal has been closed.');
+        onRequestClose={ () => {
+          props.parent.setSymbolsVisible(!props.visible);
         }}
       >
         <TouchableOpacity
@@ -19,8 +18,7 @@ const Symbols = (props) => {
             justifyContent: 'center',
             flex: 1,
             alignItems: 'center',
-            backgroundColor: 'rgba(0,0,0,0.3)',
-            marginTop: Header.HEIGHT
+            backgroundColor: 'rgba(0,0,0,0.3)'
           }}
           onPress={() => {
             props.parent.setSymbolsVisible(!props.visible);
