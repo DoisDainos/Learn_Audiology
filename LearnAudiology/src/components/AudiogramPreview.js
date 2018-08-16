@@ -4,6 +4,9 @@ import { Svg } from 'react-native-svg';
 import Grid from './audiogram_parts/Grid';
 import Points from './audiogram_parts/Points';
 
+/*
+ * Similar to audiogram, but with less interactivity and no axes.
+ */
 class AudiogramPreview extends React.Component {
   constructor(props) {
     super(props);
@@ -64,7 +67,6 @@ class AudiogramPreview extends React.Component {
             dBsMinor={ dBsMinor }
             frequencies={ frequenciesGrid }
             parent={ this }
-            isPreview={ true }
           />
           {this.state.pointsACRight.length > 0 &&
             <Points

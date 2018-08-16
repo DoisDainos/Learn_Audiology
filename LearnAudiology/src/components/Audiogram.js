@@ -460,7 +460,6 @@ class Audiogram extends React.Component {
                 dBsMinor={ dBsMinor }
                 frequencies={ frequenciesGrid }
                 parent={ this }
-                isPreview={ false }
               />
               {this.state.pointsACRight.length > 0 &&
                 <Points
