@@ -21,6 +21,9 @@ const Points = (props) => {
     xPoints.push(toPush);
     for (let i=0; i<props.xGridLines.length; i++) {
       n += 3.617;
+      if (i === props.xGridLines.length - 3) {
+        n -= 0.45;
+      }
       toPush = n.toString() + '%';
       xPoints.push(toPush);
     }
