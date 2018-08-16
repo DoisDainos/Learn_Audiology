@@ -92,6 +92,12 @@ class Audiogram extends React.Component {
     })
   }
 
+  setTitle(title) {
+    this.setState({
+      title: title
+    })
+  }
+
   /*
    * Handle pressing of add points button.
    */

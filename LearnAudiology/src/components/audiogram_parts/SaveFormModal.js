@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Modal, TouchableOpacity } from 'react-native';
+import { View, Text, Modal, TouchableOpacity, Alert } from 'react-native';
 import { FormLabel,  FormInput, Button, Icon } from 'react-native-elements';
 import { Header } from 'react-navigation';
 import styles from '../../styles/TextStyles';
@@ -11,10 +11,17 @@ class SaveFormModal extends React.Component {
   constructor(props) {
     super(props);
     this.saveGraph = this.saveGraph.bind(this);
+    this.overwrite = this.overwrite.bind(this);
   }
 
   state = {
     name: ''
+  }
+
+  overwrite(name, points) {
+    saveGraph(name, points, true);
+    this.props.parent.setSaveFormVisible(!this.props.visible);
+    this.props.parent.setTitle(name);
   }
 
   /*
@@ -26,7 +33,24 @@ class SaveFormModal extends React.Component {
     points.push(this.props.parent.state.pointsACLeft);
     points.push(this.props.parent.state.pointsBCRight);
     points.push(this.props.parent.state.pointsBCLeft);
-    saveGraph(this.state.name, points, false);
+    saveGraph(this.state.name, points, false)
+    .then(result => {
+      if (result) {
+        console.log('Saved successfully');
+        this.props.parent.setSaveFormVisible(!this.props.visible);
+        this.props.parent.setTitle(this.state.name);
+      } else {
+        Alert.alert(
+          'Graph with that title already exists',
+          'Would you like to overwrite?',
+          [
+            { text: 'No', onPress: () => console.log('Cancel Pressed') },
+            { text: 'Yes', onPress: () => this.overwrite(this.state.name, points) },
+          ],
+          { cancelable: false }
+        )
+      }
+    })
   }
 
   render() {

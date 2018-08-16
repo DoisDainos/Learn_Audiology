@@ -4,16 +4,20 @@ import store from 'react-native-simple-store';
  * Save graph with provided title and generated local date-time variable.
  */
 function saveGraph(title, points, overwrite) {
-  getGraph(title)
+  return getGraph(title)
   .then(graph => {
     if (graph && !overwrite) {
-      console.log('Graph of that name already saved');
+      console.log('Request overwrite');
+      return false;
     } else if (graph) {
+      console.log('Overwriting');
       deleteGraph(title);
       pushGraph(title, points);
     } else {
-      pushGraph(title, points)
+      console.log('New graph saved')
+      pushGraph(title, points);
     }
+    return true;
   })
 }
 
@@ -35,16 +39,27 @@ function pushGraph(title, points) {
   store.get('graphTitles')
   .then(titles => {
     if (titles) {
+      // Find if title already in use
+      let found = false;
       for (let i=0; i<titles.length; i++) {
-        if (titles[i] != title) {
-          store.push('graphTitles', title);
+        if (titles[i] === title) {
+          found = true;
+          break;
         }
       }
+      if (!found) {
+        console.log('New graph title added');
+        store.push('graphTitles', title);
+      }
     } else {
+      // No titles yet
+      console.log('First graph title added');
       store.push('graphTitles', title);
     }
   })
-  store.push(title, graph);
+  .then(() => {
+    store.push(title, graph);
+  })
 }
 
 /*
