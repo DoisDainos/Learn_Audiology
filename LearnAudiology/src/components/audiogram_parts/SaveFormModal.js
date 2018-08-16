@@ -15,13 +15,22 @@ class SaveFormModal extends React.Component {
   }
 
   state = {
-    name: ''
+    name: '',
+    loading: false,
+    buttonText: 'SAVE'
   }
 
   overwrite(name, points) {
     saveGraph(name, points, true);
     this.props.parent.setSaveFormVisible(!this.props.visible);
     this.props.parent.setTitle(name);
+    let that = this;
+    setTimeout(function () {
+      that.setState({
+        loading: false,
+        buttonText: 'SAVE'
+      })
+    }, 500);
   }
 
   /*
@@ -33,12 +42,24 @@ class SaveFormModal extends React.Component {
     points.push(this.props.parent.state.pointsACLeft);
     points.push(this.props.parent.state.pointsBCRight);
     points.push(this.props.parent.state.pointsBCLeft);
+    this.setState({
+      loading: true,
+      buttonText: ''
+    })
+    let that = this;
     saveGraph(this.state.name, points, false)
     .then(result => {
       if (result) {
         console.log('Saved successfully');
         this.props.parent.setSaveFormVisible(!this.props.visible);
         this.props.parent.setTitle(this.state.name);
+        let that = this;
+        setTimeout(function () {
+          that.setState({
+            loading: false,
+            buttonText: 'SAVE'
+          })
+        }, 500);
       } else {
         Alert.alert(
           'Graph with that title already exists',
@@ -97,8 +118,10 @@ class SaveFormModal extends React.Component {
                   />
                   <Button
                     containerViewStyle={{ marginTop: 20 }}
-                    title="SAVE"
+                    buttonStyle={{ height: 40 }}
+                    title={ this.state.buttonText }
                     onPress={ this.saveGraph }
+                    loading={ this.state.loading }
                     raised
                   />
                 </View>

@@ -65,6 +65,7 @@ class Audiogram extends React.Component {
     this.addPointsPress = this.addPointsPress.bind(this);
     this.savePress = this.savePress.bind(this);
     this.editPress = this.editPress.bind(this);
+    this.setTitle = this.setTitle.bind(this);
   }
 
   /*
@@ -96,6 +97,8 @@ class Audiogram extends React.Component {
     this.setState({
       title: title
     })
+    const { setParams } = this.props.navigation;
+    setParams({ title: title })
   }
 
   /*
