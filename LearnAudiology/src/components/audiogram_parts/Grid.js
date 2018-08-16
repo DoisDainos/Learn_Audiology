@@ -11,13 +11,15 @@ class Grid extends React.Component {
   }
 
   handleGridPress(index) {
-    if (
-      this.props.parent.getPointsAtFreq(
-        this.props.frequencies[index + 1]
-      ).length > 0) {
-      this.props.parent.displayPointsModal(
-        this.props.parent.getPointsAtFreq(this.props.frequencies[index + 1])
-      );
+    if (!this.props.isPreview) {
+      if (
+        this.props.parent.getPointsAtFreq(
+          this.props.frequencies[index + 1]
+        ).length > 0) {
+        this.props.parent.displayPointsModal(
+          this.props.parent.getPointsAtFreq(this.props.frequencies[index + 1])
+        );
+      }
     }
   }
 

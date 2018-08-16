@@ -15,7 +15,7 @@ class SaveFormModal extends React.Component {
   }
 
   state = {
-    name: '',
+    name:  this.props.parent.state.title,
     loading: false,
     buttonText: 'SAVE'
   }

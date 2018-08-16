@@ -67,6 +67,7 @@ class AudiogramPreview extends React.Component {
             dBsMinor={ dBsMinor }
             frequencies={ frequenciesGrid }
             parent={ this }
+            isPreview={ true }
           />
           {this.state.pointsACRight.length > 0 &&
             <Points
