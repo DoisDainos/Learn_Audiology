@@ -26,7 +26,7 @@ class SaveFormModal extends React.Component {
     points.push(this.props.parent.state.pointsACLeft);
     points.push(this.props.parent.state.pointsBCRight);
     points.push(this.props.parent.state.pointsBCLeft);
-    saveGraph(this.state.name, points, true);
+    saveGraph(this.state.name, points, false);
   }
 
   render() {
@@ -69,6 +69,7 @@ class SaveFormModal extends React.Component {
                   <FormInput
                     onChangeText={ (name) => this.setState({ name }) }
                     autoFocus
+                    defaultValue={ this.props.parent.state.title }
                   />
                   <Button
                     containerViewStyle={{ marginTop: 20 }}
