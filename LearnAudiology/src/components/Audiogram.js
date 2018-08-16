@@ -108,8 +108,18 @@ class Audiogram extends React.Component {
    * Add to air conduction right ear unmasked point array.
    */
   addPointACRight(point) {
+    let points = this.state.pointsACRight;
+    for (let i=0; i<points.length; i++) {
+      if (points[i].Hz === point.Hz) {
+        points[i] = point;
+        this.setState({
+          pointsACRight: points
+        })
+        return;
+      }
+    }
     this.setState({
-      pointsACRight: this.state.pointsACRight.concat([point])
+      pointsACRight: points.concat([point])
     });
   }
 
@@ -117,6 +127,16 @@ class Audiogram extends React.Component {
    * Add to air conduction left ear unmasked point array.
    */
   addPointACLeft(point) {
+    let points = this.state.pointsACLeft;
+    for (let i=0; i<points.length; i++) {
+      if (points[i].Hz === point.Hz) {
+        points[i] = point;
+        this.setState({
+          pointsACLeft: points
+        })
+        return;
+      }
+    }
     this.setState({
       pointsACLeft: this.state.pointsACLeft.concat([point])
     });
@@ -126,6 +146,16 @@ class Audiogram extends React.Component {
    * Add to bone conduction right ear unmasked point array.
    */
   addPointBCRight(point) {
+    let points = this.state.pointsBCRight;
+    for (let i=0; i<points.length; i++) {
+      if (points[i].Hz === point.Hz) {
+        points[i] = point;
+        this.setState({
+          pointsBCRight: points
+        })
+        return;
+      }
+    }
     this.setState({
       pointsBCRight: this.state.pointsBCRight.concat([point])
     });
@@ -135,6 +165,16 @@ class Audiogram extends React.Component {
    * Add to bone conduction left ear unmasked point array.
    */
   addPointBCLeft(point) {
+    let points = this.state.pointsBCLeft;
+    for (let i=0; i<points.length; i++) {
+      if (points[i].Hz === point.Hz) {
+        points[i] = point;
+        this.setState({
+          pointsBCLeft: points
+        })
+        return;
+      }
+    }
     this.setState({
       pointsBCLeft: this.state.pointsBCLeft.concat([point])
     });
